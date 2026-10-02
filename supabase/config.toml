@@ -1,0 +1,14 @@
+project_id = "farmacova"
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://localhost:3000/auth/callback?next=/auth/actualizar-clave"]
+enable_signup = true
+minimum_password_length = 8
+password_requirements = "lower_upper_letters_digits_symbols"
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+double_confirm_changes = true
+secure_password_change = true
