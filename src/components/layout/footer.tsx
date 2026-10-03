@@ -12,7 +12,6 @@ export function Footer() {
           </p>
         </div>
         <div className="flex flex-wrap gap-x-10 gap-y-4 text-sm">
-          <Link href="/catalogo">Catálogo</Link>
           <Link href="/promociones">Promociones</Link>
           <Link href="/servicios">Nuestros servicios</Link>
           <Link href="/auth?mode=registro">Crear mi perfil</Link>
@@ -20,8 +19,8 @@ export function Footer() {
         </div>
       </div>
       <div className="shell mt-8 border-t border-slate-100 pt-6 text-xs leading-relaxed text-slate-500">
-        © {new Date().getFullYear()} Farmacova · Costa Rica. Catálogo
-        informativo. La disponibilidad se confirma en sucursal.
+        © {new Date().getFullYear()} Farmacova · Costa Rica. Sitio informativo.
+        La disponibilidad se confirma en sucursal.
       </div>
     </footer>
   );

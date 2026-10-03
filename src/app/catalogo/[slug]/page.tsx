@@ -37,10 +37,10 @@ export default async function ProductPage({
   return (
     <div className="shell py-12">
       <Link
-        href="/catalogo"
+        href="/promociones"
         className="text-sm font-semibold text-blue-800 underline underline-offset-4"
       >
-        Volver al catálogo
+        Volver a las promociones
       </Link>
       <div className="mt-8 grid gap-10 md:grid-cols-2">
         <div className="flex min-h-72 items-center justify-center rounded-3xl bg-slate-50 text-blue-800">

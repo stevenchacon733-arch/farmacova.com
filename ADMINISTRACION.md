@@ -17,7 +17,15 @@
 - `/administracion/configuracion`: pausar inscripción/acumulación, acumulación de compras pequeñas, sellos sobre el importe neto al canjear y condiciones adicionales.
 - `/administracion/historial`: últimas 100 operaciones del servidor con usuario, entidad, fecha y campos modificados.
 
-## Reglas vigentes
+## Publicar las promociones del mes
+
+La web pública es informativa: la portada muestra las promociones vigentes justo después del carrusel. Ya no tiene una sección general de medicamentos ni bloques de más vendidos y destacados. Las fichas individuales siguen disponibles para explicar cada producto, sin carrito ni cobros.
+
+En **Productos**, selecciona los productos del mes, activa **Mostrar en promociones** y **Publicado**, carga la imagen y completa la etiqueta, precio y fechas de vigencia. Las fechas se interpretan en horario de Costa Rica. El inicio está incluido y el fin está excluido: para un mes completo, usa el día 1 a las 00:00 y el día 1 del mes siguiente a las 00:00. Una promoción sin fechas sigue visible hasta desactivarla. Los precios de oferta necesitan las dos fechas y un precio menor al regular; el ahorro porcentual de las tarjetas se calcula con esos precios.
+
+La búsqueda pública muestra únicamente promociones vigentes. Las promociones futuras o vencidas no aparecen en las listas; se pueden preparar por adelantado desde el panel. Los anuncios del carrusel se administran por separado en **Anuncios**. Los enlaces antiguos al catálogo general llevan a las promociones.
+
+## Reglas de fidelidad
 
 **Seis espacios; ₡10.000 por sello; 15% al completar; una compra por cupón.**
 

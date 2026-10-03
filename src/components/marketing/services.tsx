@@ -8,8 +8,8 @@ const services = [
     description:
       "Encuentra tus medicamentos y confirma su disponibilidad en sucursal.",
     icon: Pill,
-    link: "/catalogo",
-    action: "Ver medicamentos",
+    link: "/sucursales",
+    action: "Encontrar sucursal",
   },
   {
     id: "vacunas",
@@ -42,7 +42,7 @@ export function Services() {
         {services.map((service) => (
           <article
             key={service.id}
-            className="rounded-2xl border border-slate-200 bg-white p-7"
+            className="rounded-sm border border-slate-200 bg-white p-7"
           >
             <service.icon
               size={32}

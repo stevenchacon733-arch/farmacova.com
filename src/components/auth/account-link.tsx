@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 
-export function AccountLink() {
+export function AccountLink({ dark = false }: { dark?: boolean }) {
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
     if (!hasSupabaseConfig()) return;
@@ -28,9 +28,17 @@ export function AccountLink() {
   return (
     <Link
       href={signedIn ? "/cuenta" : "/auth"}
-      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold text-blue-900 hover:bg-slate-50"
+      className={
+        dark
+          ? "flex shrink-0 flex-col items-center gap-1 text-xs text-white hover:text-green-300"
+          : "inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold text-blue-900 hover:bg-slate-50"
+      }
     >
-      <UserRound size={19} aria-hidden="true" />
+      <UserRound
+        size={dark ? 25 : 19}
+        strokeWidth={dark ? 1.6 : 2}
+        aria-hidden="true"
+      />
       <span>{signedIn ? "Mi perfil" : "Mi cuenta"}</span>
     </Link>
   );

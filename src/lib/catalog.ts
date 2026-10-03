@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { getSupabaseConfig } from "./supabase/config";
 import { normalizeSearch } from "./validation";
+import { isActivePromotion } from "./promotions";
 
 export type Category = {
   slug: string;
@@ -192,7 +193,7 @@ export const pageSize = 12;
 function inCollection(product: Product, collection: Collection) {
   if (collection === "mas-vendidos") return product.bestseller_rank !== null;
   if (collection === "destacados") return product.featured;
-  if (collection === "promociones") return product.promotional;
+  if (collection === "promociones") return isActivePromotion(product);
   return true;
 }
 
@@ -241,7 +242,13 @@ export async function searchProducts(
       .not("bestseller_rank", "is", null)
       .order("bestseller_rank");
   if (collection === "destacados") request = request.eq("featured", true);
-  if (collection === "promociones") request = request.eq("promotional", true);
+  if (collection === "promociones") {
+    const now = new Date().toISOString();
+    request = request
+      .eq("promotional", true)
+      .or(`promotion_starts_at.is.null,promotion_starts_at.lte.${now}`)
+      .or(`promotion_ends_at.is.null,promotion_ends_at.gt.${now}`);
+  }
   const { data, count, error } = await request
     .order("name")
     .order("slug")

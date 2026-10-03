@@ -1,66 +1,101 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getCollectionProducts, isDemoMode } from "@/lib/catalog";
-import { ProductCard } from "@/components/catalog/product-card";
+import { searchProducts, pageSize, isDemoMode } from "@/lib/catalog";
+import { PromotionCard } from "@/components/catalog/promotion-card";
 
-export const metadata: Metadata = { title: "Promociones" };
+export const metadata: Metadata = { title: "Promociones del mes" };
 export const dynamic = "force-dynamic";
 
-export default async function PromotionsPage() {
-  const products = await getCollectionProducts("promociones");
+export default async function PromotionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; pagina?: string }>;
+}) {
+  const params = await searchParams;
+  const query =
+    typeof params.q === "string" ? params.q.trim().slice(0, 120) : "";
+  const parsedPage = Number(params.pagina);
+  const page =
+    Number.isSafeInteger(parsedPage) && parsedPage > 0 && parsedPage <= 10000
+      ? parsedPage
+      : 1;
+  const { products, total } = await searchProducts(
+    query,
+    "",
+    page,
+    "promociones",
+  );
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+  const pageHref = (value: number) =>
+    `/promociones?${new URLSearchParams({ q: query, pagina: String(value) })}`;
   return (
     <div className="shell py-12">
-      <span className="eyebrow">Descubre lo que tenemos para ti</span>
+      <span className="eyebrow">Una selección para ti</span>
       <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-blue-950">
-        Promociones y campañas
+        Promociones del mes
       </h1>
       <p className="mt-4 max-w-2xl leading-relaxed text-slate-600">
-        Conoce nuestros productos en promoción. Las condiciones y la
-        disponibilidad se confirman en sucursal.
+        Conoce los productos seleccionados por Farmacova este mes. Las
+        condiciones y la disponibilidad se confirman en sucursal.
       </p>
-      <section className="mt-8 grid items-center gap-8 rounded-3xl bg-slate-50 p-5 md:grid-cols-2 md:p-8">
-        <Image
-          src="/images/tioflex-raven.png"
-          alt="Campaña de Tioflex de Laboratorios Raven: Vuelve a tu ritmo sin dolor."
-          width={554}
-          height={554}
-          className="h-auto w-full rounded-2xl"
-          sizes="(max-width: 768px) calc(100vw - 80px), 540px"
-          unoptimized
-        />
-        <div>
-          <span className="eyebrow">Laboratorios Raven</span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-blue-950">
-            Conoce Tioflex.
-          </h2>
-          <p className="mt-4 leading-relaxed text-slate-600">
-            Descubre la campaña de Raven y encuentra más información del
-            producto en nuestro catálogo.
+      {query && (
+        <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
+          <p className="text-slate-600">
+            {total} resultados para “{query}”
           </p>
-          <Link href="/catalogo/tioflex" className="btn-primary mt-7">
-            Ver detalles
+          <Link
+            href="/promociones"
+            className="font-semibold text-blue-800 underline"
+          >
+            Ver todas las promociones
           </Link>
         </div>
-      </section>
-      <h2 className="mt-12 text-2xl font-bold text-blue-950">
-        Productos en promoción
-      </h2>
+      )}
       {isDemoMode() && (
-        <p className="mt-3 text-xs text-slate-500">
-          La campaña usa el anuncio proporcionado. Los datos comerciales del
-          catálogo son de ejemplo.
+        <p className="mt-6 text-xs text-slate-500">
+          Vista de ejemplo. Los productos y precios del mes se publican desde el
+          panel de administración.
         </p>
       )}
-      <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {products.map((product) => (
-          <ProductCard key={product.slug} product={product} />
-        ))}
-      </div>
-      {!products.length && (
-        <p className="mt-6 text-slate-500">
-          Estamos preparando nuevas promociones. Vuelve pronto.
-        </p>
+      {products.length ? (
+        <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <PromotionCard key={product.slug} product={product} />
+          ))}
+        </div>
+      ) : (
+        <div className="mt-7 rounded-2xl bg-slate-50 p-8 text-slate-600">
+          {query ? (
+            <p>
+              No encontramos promociones con ese nombre. Prueba otra búsqueda.
+            </p>
+          ) : (
+            <p>
+              Estamos preparando nuevas promociones. Vuelve pronto para conocer
+              los productos del mes.
+            </p>
+          )}
+        </div>
+      )}
+      {pages > 1 && (
+        <nav
+          aria-label="Páginas de promociones"
+          className="mt-8 flex items-center justify-center gap-4"
+        >
+          {page > 1 && (
+            <Link href={pageHref(page - 1)} className="btn-secondary">
+              Anterior
+            </Link>
+          )}
+          <span className="text-sm text-slate-500">
+            Página {page} de {pages}
+          </span>
+          {page < pages && (
+            <Link href={pageHref(page + 1)} className="btn-secondary">
+              Siguiente
+            </Link>
+          )}
+        </nav>
       )}
     </div>
   );

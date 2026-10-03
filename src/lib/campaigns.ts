@@ -33,13 +33,13 @@ export const demoCampaigns: Campaign[] = [
   },
   {
     id: "22222222-2222-4222-8222-222222222222",
-    title: "Tus medicamentos.\nMás cerca de ti.",
-    eyebrow: "Descubre nuestros más vendidos",
+    title: "Productos del mes.\nElegidos para ti.",
+    eyebrow: "Promociones del mes",
     description:
-      "Explora la selección de medicamentos de Farmacova y encuentra información de cada producto.",
+      "Conoce los productos seleccionados este mes y confirma las condiciones de las promociones en sucursal.",
     image_path: null,
-    cta_label: "Ver más vendidos",
-    cta_href: "/catalogo?coleccion=mas-vendidos",
+    cta_label: "Ver promociones del mes",
+    cta_href: "/promociones",
     sponsored: false,
     sponsor: "",
     position: 2,

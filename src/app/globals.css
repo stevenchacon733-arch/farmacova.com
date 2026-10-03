@@ -34,7 +34,7 @@ summary {
   outline-offset: 4px;
 }
 .shell {
-  width: min(100% - 2.5rem, 1240px);
+  width: min(100% - 2.5rem, 1440px);
   margin-inline: auto;
 }
 .btn-primary {
@@ -70,11 +70,15 @@ summary {
   backdrop-filter: blur(5px);
 }
 .hero-carousel {
-  background: linear-gradient(115deg, #0864e7 0%, #0754c7 52%, #063c8e 100%);
+  background: linear-gradient(110deg, #eaf2ff 0%, #dceaff 55%, #e5f5e8 100%);
   touch-action: pan-y;
 }
 .hero-slide {
   animation: hero-enter 230ms ease-out;
+}
+.offers-rail {
+  scrollbar-width: thin;
+  scrollbar-color: #1e3a8a #eff6ff;
 }
 @keyframes hero-enter {
   from {

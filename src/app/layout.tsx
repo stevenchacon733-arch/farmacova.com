@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "Farmacova | Cuidamos de ti", template: "%s | Farmacova" },
   description:
-    "Descubre medicamentos, más vendidos y promociones de Farmacova en Costa Rica. Venta de medicamentos, aplicación de vacunas e inyectables.",
+    "Descubre las promociones del mes de Farmacova en Costa Rica. Información de productos, aplicación de vacunas e inyectables y Club Farmacova.",
   robots: { index: true, follow: true },
 };
 

@@ -1,85 +1,105 @@
 import Link from "next/link";
-import { BadgePercent, Menu, Search } from "lucide-react";
+import { BadgePercent, Search, CreditCard, MapPin } from "lucide-react";
 import { Brand } from "./brand";
 import { AccountLink } from "../auth/account-link";
 
 export function Navbar() {
   return (
-    <header className="relative z-20 border-b border-slate-200 bg-white">
-      <div className="bg-blue-950 text-blue-50">
-        <div className="shell flex min-h-9 items-center justify-between gap-4 py-2 text-xs">
-          <span>Medicamentos · Vacunas · Inyectables</span>
-          <span>Costa Rica</span>
+    <header className="relative z-20 bg-blue-950 text-white">
+      <div className="border-b border-white/10">
+        <div className="shell flex min-h-8 items-center justify-between gap-4 text-xs">
+          <span className="text-blue-100">Farmacova · Costa Rica</span>
+          <div className="flex items-center gap-4 py-2">
+            <Link href="/servicios" className="hover:text-green-300">
+              Servicios
+            </Link>
+            <Link
+              href="/sucursales"
+              className="flex items-center gap-1.5 hover:text-green-300"
+            >
+              <MapPin size={13} aria-hidden="true" /> Encuentra tu sucursal
+            </Link>
+          </div>
         </div>
       </div>
-      <div className="shell flex flex-wrap items-center gap-x-10 gap-y-5 py-6">
-        <Brand />
+      <div className="shell flex flex-wrap items-center gap-x-8 gap-y-4 py-4">
+        <div className="rounded-sm bg-white px-3 py-1">
+          <Brand />
+        </div>
         <form
-          action="/catalogo"
+          action="/promociones"
           role="search"
-          className="order-3 flex w-full items-center rounded-full border border-slate-200 bg-slate-50 p-1.5 md:order-none md:flex-1"
+          className="order-3 flex w-full items-center border border-blue-200 bg-white text-blue-950 md:order-none md:flex-1"
         >
-          <Search
-            size={20}
-            aria-hidden="true"
-            className="ml-4 shrink-0 text-slate-400"
-          />
           <label htmlFor="site-search" className="sr-only">
-            Buscar en el catálogo
+            Buscar en las promociones del mes
           </label>
           <input
             id="site-search"
             name="q"
             type="search"
             maxLength={120}
-            placeholder="Busca medicamentos, marcas o categorías"
-            className="min-w-0 flex-1 border-0 bg-transparent px-3 py-2.5 text-sm outline-none"
+            placeholder="Busca productos y promociones del mes"
+            className="min-w-0 flex-1 bg-transparent px-4 py-4 text-sm outline-none sm:text-base"
           />
           <button
             type="submit"
-            className="rounded-full bg-blue-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-900"
+            aria-label="Buscar promociones"
+            className="px-4 py-3 text-blue-950 hover:text-green-700"
           >
-            Buscar
+            <Search size={28} strokeWidth={1.6} aria-hidden="true" />
           </button>
         </form>
-        <div className="ml-auto md:ml-0">
-          <AccountLink />
+        <div className="ml-auto flex items-center gap-4 md:ml-0">
+          <AccountLink dark />
+          <Link
+            href="/fidelidad"
+            className="flex flex-col items-center gap-1 text-white hover:text-green-300"
+          >
+            <CreditCard size={25} strokeWidth={1.6} aria-hidden="true" />
+            <span className="text-xs">Mi tarjeta</span>
+          </Link>
         </div>
       </div>
       <nav
         aria-label="Navegación principal"
-        className="shell flex flex-wrap items-center justify-between gap-x-5 gap-y-3 pb-4 text-sm"
+        className="shell flex items-stretch gap-x-1 overflow-x-auto whitespace-nowrap text-sm sm:gap-x-4 [&>a]:shrink-0"
       >
-        <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
-          <Link className="nav-link flex items-center gap-2" href="/catalogo">
-            <Menu size={17} aria-hidden="true" /> Medicamentos
-          </Link>
-          <Link className="nav-link" href="/catalogo?coleccion=mas-vendidos">
-            Más vendidos
-          </Link>
-          <Link className="nav-link" href="/catalogo?coleccion=destacados">
-            Destacados
-          </Link>
-          <Link className="nav-link" href="/servicios">
-            Vacunas e inyectables
-          </Link>
-          <Link className="nav-link" href="/sucursales">
-            Sucursales
-          </Link>
-        </div>
-        <Link
-          className="nav-link font-semibold text-blue-800"
-          href="/fidelidad"
-        >
-          Club Farmacova · 15%
-        </Link>
         <Link
           href="/promociones"
-          className="flex items-center gap-2 font-semibold text-green-700 hover:text-green-800"
+          className="flex items-center gap-2 bg-green-600 px-5 py-4 font-bold hover:bg-green-700"
         >
-          <BadgePercent size={18} aria-hidden="true" /> Promociones
+          <BadgePercent size={19} aria-hidden="true" /> Ofertas
+        </Link>
+        <Link href="/" className="px-4 py-4 font-medium hover:bg-white/10">
+          Inicio
+        </Link>
+        <Link
+          href="/servicios"
+          className="px-4 py-4 font-medium hover:bg-white/10"
+        >
+          Vacunas e inyectables
+        </Link>
+        <Link
+          href="/sucursales"
+          className="px-4 py-4 font-medium hover:bg-white/10"
+        >
+          Sucursales
+        </Link>
+        <Link
+          href="/fidelidad"
+          className="px-4 py-4 font-medium hover:bg-white/10"
+        >
+          Club Farmacova
         </Link>
       </nav>
+      <Link
+        href="/fidelidad"
+        className="block bg-green-600 px-5 py-3 text-center text-sm font-semibold hover:bg-green-700"
+      >
+        Tus compras tienen recompensa: completa 6 sellos y recibe un 15% de
+        descuento
+      </Link>
     </header>
   );
 }

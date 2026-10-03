@@ -20,12 +20,12 @@ Abre http://localhost:3000. Para ejecutar una compilación de producción: `npm 
 
 ## Diseño y funciones
 
-- Logo Farma en azul y cova en verde; eslogan CUIDAMOS DE TI.
-- Portada con carrusel azul inspirado en la referencia proporcionada, imagen a la izquierda y contenido a la derecha.
+- Logo oficial proporcionado por Farmacova, con eslogan CUIDAMOS DE TI.
+- Encabezado azul marino, pestaña verde de ofertas, búsqueda amplia y carrusel a todo el ancho, con texto a la izquierda e imagen a la derecha, siguiendo las nuevas referencias.
 - Cambio automático cada 6 segundos, flechas, puntos, teclado y deslizamiento táctil. Botón para pausar/reanudar. Se pausa al pasar el cursor, al mantener el foco dentro, con la pestaña oculta y mientras hay un modal abierto. Respeta la preferencia de movimiento reducido.
 - Anuncio real de Raven/Tioflex incluido en `public/images/tioflex-raven.png`. Se muestra completo en el carrusel y en el pop-up.
 - Pop-up a los 3 segundos: solo la X o Cerrar y continuar permiten quitarlo. El fondo queda bloqueado y Escape no lo cierra.
-- Medicamentos, más vendidos, productos destacados y promociones. Catálogo con búsqueda, filtros, paginación y fichas. Sin carrito ni pagos.
+- Promociones del mes inmediatamente debajo del carrusel: tarjetas grandes deslizables, acceso a todas las ofertas y franjas de color entre apartados. Solo productos publicados y promociones vigentes; búsqueda y paginación en `/promociones`. El catálogo general se retiró de la navegación y sus enlaces antiguos redirigen a promociones. Se conservan las fichas informativas de producto. Sin carrito ni pagos.
 - Servicios: venta de medicamentos, aplicación de vacunas y aplicación de inyectables. Se retiró el portal de consultas según lo solicitado.
 - Registro, ingreso, confirmación de correo, recuperación y cambio de contraseña mediante Supabase. Perfil protegido.
 
