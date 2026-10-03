@@ -9,11 +9,11 @@ export function Brand() {
       className="inline-flex shrink-0 items-center"
     >
       <Image
-        src="/images/farmacova-logo.png"
+        src="/images/farmacova-logo-transparente.png"
         alt="Farmacova · Cuidamos de ti"
         width={222}
         height={112}
-        className="h-auto w-28 sm:w-36"
+        className="h-auto w-36 sm:w-44"
         unoptimized
       />
     </Link>

@@ -1,3 +1,5 @@
+import { safeBranchUrl, type Branch } from "./branches.ts";
+
 export type AdminProduct = {
   id: string;
   slug: string;
@@ -19,14 +21,7 @@ export type AdminProduct = {
   promotion_ends_at: string | null;
   availability: string;
 };
-export type AdminBranch = {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  hours: string;
-  published: boolean;
-};
+export type AdminBranch = Branch;
 export type AdminSettings = {
   id: number;
   loyalty_enabled: boolean;
@@ -85,13 +80,28 @@ export function validateRecord(
   if (!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(id))
     throw new Error("Identificador inválido.");
   if (entity === "sucursales") {
-    const phone = text(row.phone, "Teléfono", 0, 24);
-    if (!/^\+?[0-9 ()-]*$/.test(phone)) throw new Error("Teléfono inválido.");
+    const branchPhone = (value: unknown) => {
+      const phone = text(value ?? "", "Teléfono", 0, 24);
+      if (!/^\+?[0-9 ()-]*$/.test(phone)) throw new Error("Teléfono inválido.");
+      return phone;
+    };
+    const branchUrl = (value: unknown, kind: "maps" | "waze" | "facebook") => {
+      const url = text(value ?? "", "Enlace", 0, 1000);
+      if (url && !safeBranchUrl(url, kind))
+        throw new Error(
+          `Usa un enlace HTTPS válido de ${kind === "maps" ? "Google Maps" : kind === "waze" ? "Waze" : "Facebook"}.`,
+        );
+      return url;
+    };
     return {
       id,
       name: text(row.name, "Nombre", 2, 120),
       address: text(row.address, "Dirección", 2, 500),
-      phone,
+      phone: branchPhone(row.phone),
+      secondary_phone: branchPhone(row.secondary_phone),
+      maps_url: branchUrl(row.maps_url, "maps"),
+      waze_url: branchUrl(row.waze_url, "waze"),
+      facebook_url: branchUrl(row.facebook_url, "facebook"),
       hours: text(row.hours, "Horario", 0, 500),
       published: bool(row.published),
     };
@@ -104,7 +114,13 @@ export function validateRecord(
     );
   const category = text(row.category_slug, "Categoría", 1, 30);
   if (
-    !["dolor", "respiratorio", "digestivo", "prescripcion"].includes(category)
+    ![
+      "dolor",
+      "respiratorio",
+      "digestivo",
+      "prescripcion",
+      "nutricion",
+    ].includes(category)
   )
     throw new Error("Categoría inválida.");
   const base = price(row.price_crc),

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { getSupabaseConfig } from "./supabase/config";
 import { normalizeSearch } from "./validation";
 import { isActivePromotion } from "./promotions";
+import { monthlyProducts } from "./monthly-products";
 
 export type Category = {
   slug: string;
@@ -41,6 +42,12 @@ export type Collection =
 
 export const categories: Category[] = [
   {
+    slug: "nutricion",
+    name: "Nutrición y suplementos",
+    description: "Información de productos de nutrición",
+    icon: "leaf",
+  },
+  {
     slug: "dolor",
     name: "Dolor y fiebre",
     description: "Explora medicamentos de esta categoría",
@@ -68,6 +75,7 @@ export const categories: Category[] = [
 
 // Solo ejemplos de catálogo: no representan inventario, precios ni ventas reales.
 export const demoProducts: Product[] = [
+  ...monthlyProducts,
   {
     slug: "tioflex",
     name: "Tioflex",

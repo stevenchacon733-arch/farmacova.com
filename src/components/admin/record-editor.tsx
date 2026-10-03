@@ -33,6 +33,10 @@ const names: Record<string, string> = {
   promotional: "Mostrar en promociones",
   address: "Dirección",
   phone: "Teléfono",
+  secondary_phone: "Segundo teléfono (opcional)",
+  maps_url: "Enlace de Google Maps (opcional)",
+  waze_url: "Enlace de Waze (opcional)",
+  facebook_url: "Facebook de la sucursal (opcional)",
   hours: "Horario",
   loyalty_enabled: "Habilitar inscripciones y acumulación",
   accumulate_remainder: "Acumular compras pequeñas entre facturas",
@@ -60,7 +64,17 @@ const fields: Record<Entity, string[]> = {
     "featured",
     "promotional",
   ],
-  sucursales: ["name", "address", "phone", "hours", "published"],
+  sucursales: [
+    "name",
+    "address",
+    "phone",
+    "secondary_phone",
+    "hours",
+    "maps_url",
+    "waze_url",
+    "facebook_url",
+    "published",
+  ],
   configuracion: [
     "loyalty_enabled",
     "accumulate_remainder",
@@ -71,7 +85,18 @@ const fields: Record<Entity, string[]> = {
 function blank(entity: Entity): AdminRecord {
   const id = crypto.randomUUID();
   return entity === "sucursales"
-    ? { id, name: "", address: "", phone: "", hours: "", published: false }
+    ? {
+        id,
+        name: "",
+        address: "",
+        phone: "",
+        secondary_phone: "",
+        hours: "",
+        maps_url: "",
+        waze_url: "",
+        facebook_url: "",
+        published: false,
+      }
     : {
         id,
         slug: "",
@@ -411,6 +436,7 @@ export function RecordEditor({
                         ["respiratorio", "Salud respiratoria"],
                         ["digestivo", "Salud digestiva"],
                         ["prescripcion", "Con receta"],
+                        ["nutricion", "Nutrición y suplementos"],
                       ]
                     : field === "availability"
                       ? [
@@ -499,7 +525,11 @@ export function RecordEditor({
                               ? 999
                               : undefined
                         }
-                        maxLength={field === "image_path" ? 1000 : 200}
+                        maxLength={
+                          field === "image_path" || field.endsWith("_url")
+                            ? 1000
+                            : 200
+                        }
                         required={["name", "slug"].includes(field)}
                         value={
                           field.endsWith("_at")

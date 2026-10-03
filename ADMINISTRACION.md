@@ -2,7 +2,7 @@
 
 ## Activación
 
-1. Aplicar las cuatro migraciones, en orden, de `supabase/migrations/`. Si las primeras tres ya se aplicaron, ejecutar únicamente `202610020004_management_loyalty.sql`.
+1. Aplicar las cinco migraciones, en orden, de `supabase/migrations/`. Si ya aplicaste las primeras cuatro, ejecutar únicamente `202610030005_branches_monthly_promotions.sql`, que carga las cinco ubicaciones y la selección de octubre y permite editar un segundo teléfono y enlaces de mapas/redes.
 2. Configurar Supabase en Vercel y poner `FARMACOVA_DEMO_MODE=false`. El modo demo abre el panel sin credenciales únicamente para revisar su aspecto y simular operaciones; no ejecuta escrituras reales.
 3. Crear y confirmar por correo la cuenta del administrador. Asignar `app_metadata.role = admin` desde una operación de administración de Supabase; nunca conceder permisos con `user_metadata`. Cerrar sesión y volver a ingresar. El usuario ve **Administrar farmacia** en `/cuenta`.
 4. Revisar el aviso de privacidad, condiciones, productos, precios e información real de las sucursales antes de abrir al público.
@@ -13,7 +13,7 @@
 - `/administracion/productos`: alta y edición de medicamentos, categoría, presentación, receta, precio regular y de oferta, fechas de vigencia en Costa Rica, disponibilidad, imagen, más vendidos, destacados y publicación. No hay carrito ni cobros. Los medicamentos de la demo no tienen precios inventados.
 - `/administracion/anuncios`: campañas del carrusel, patrocinios, imágenes, enlaces, orden y vigencia.
 - `/administracion/clientes`: clientes inscritos, búsqueda por nombre o código QR, registro de compras, canje único de cupones, movimientos recientes y suspensión/reactivación de tarjetas.
-- `/administracion/sucursales`: dirección, teléfono, horario y publicación. Servicios disponibles: venta de medicamentos, vacunas e inyectables.
+- `/administracion/sucursales`: añadir ubicaciones y editar dirección, dos teléfonos independientes, horario, Google Maps, Waze, Facebook y publicación. Servicios disponibles: venta de medicamentos, vacunas e inyectables.
 - `/administracion/configuracion`: pausar inscripción/acumulación, acumulación de compras pequeñas, sellos sobre el importe neto al canjear y condiciones adicionales.
 - `/administracion/historial`: últimas 100 operaciones del servidor con usuario, entidad, fecha y campos modificados.
 

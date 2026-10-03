@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/management";
 import { walletConfigured } from "@/lib/wallet/config";
+import { demoProducts } from "@/lib/catalog";
+import { demoCampaigns } from "@/lib/campaigns";
 export default async function AdminPage() {
   const client = await requireAdmin();
   const counts = client
@@ -21,7 +23,7 @@ export default async function AdminPage() {
           return count ?? 0;
         }),
       )
-    : [5, 3, 0, 0];
+    : [demoProducts.length, demoCampaigns.length, 0, 0];
   return (
     <>
       <h1 className="text-3xl font-bold text-blue-950">Así va Farmacova</h1>

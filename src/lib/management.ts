@@ -34,14 +34,7 @@ export const defaultSettings: StoreSettings = {
   loyalty_terms: "",
   program_version: 1,
 };
-export type Branch = {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  hours: string;
-  published: boolean;
-};
+export type { Branch } from "./branches";
 export async function getSettings(): Promise<StoreSettings> {
   if (isDemoMode()) return defaultSettings;
   const client = await createClient();

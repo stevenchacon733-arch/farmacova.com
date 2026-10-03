@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireAdmin, defaultSettings } from "@/lib/management";
 import { demoProducts } from "@/lib/catalog";
+import { initialBranches } from "@/lib/branches";
 import { RecordEditor } from "@/components/admin/record-editor";
 import type { AdminRecord, Entity } from "@/lib/admin-validation";
 export default async function ManagementPage({
@@ -55,12 +56,13 @@ export default async function ManagementPage({
       ...product,
       id: `00000000-0000-4000-8000-${String(i + 1).padStart(12, "0")}`,
       published: true,
-      price_crc: null,
-      sale_price_crc: null,
-      promotion_starts_at: null,
-      promotion_ends_at: null,
-      availability: "confirmar",
+      price_crc: product.price_crc ?? null,
+      sale_price_crc: product.sale_price_crc ?? null,
+      promotion_starts_at: product.promotion_starts_at ?? null,
+      promotion_ends_at: product.promotion_ends_at ?? null,
+      availability: product.availability ?? "confirmar",
     }));
+  else if (entity === "sucursales") records = initialBranches;
   else if (entity === "configuracion") records = [defaultSettings];
   return (
     <>

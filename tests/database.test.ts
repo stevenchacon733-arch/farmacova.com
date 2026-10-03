@@ -151,6 +151,25 @@ test("migraciones: sellos, canje único, reintentos y permisos reales de Postgre
       0,
     );
     await db.exec("reset role; set role anon");
+    const locations = await db.query<{
+      name: string;
+      phone: string;
+      secondary_phone: string;
+    }>("select name,phone,secondary_phone from public.branches order by id");
+    assert.equal(locations.rows.length, 5);
+    assert.equal(locations.rows[1].secondary_phone, "6077-5505");
+    assert.equal(
+      (
+        await db.query(
+          "select slug from public.products where promotional and published",
+        )
+      ).rows.length,
+      3,
+    );
+    await assert.rejects(
+      db.query("update public.branches set phone='0000-0000'"),
+      /permission denied/,
+    );
     await assert.rejects(
       db.query("select * from public.loyalty_members"),
       /permission denied/,

@@ -20,13 +20,15 @@ Abre http://localhost:3000. Para ejecutar una compilación de producción: `npm 
 
 ## Diseño y funciones
 
-- Logo oficial proporcionado por Farmacova, con eslogan CUIDAMOS DE TI.
+- Logo oficial proporcionado por Farmacova, con eslogan CUIDAMOS DE TI y fondo transparente, integrado directamente en el encabezado.
 - Encabezado azul marino, pestaña verde de ofertas, búsqueda amplia y carrusel a todo el ancho, con texto a la izquierda e imagen a la derecha, siguiendo las nuevas referencias.
 - Cambio automático cada 6 segundos, flechas, puntos, teclado y deslizamiento táctil. Botón para pausar/reanudar. Se pausa al pasar el cursor, al mantener el foco dentro, con la pestaña oculta y mientras hay un modal abierto. Respeta la preferencia de movimiento reducido.
 - Anuncio real de Raven/Tioflex incluido en `public/images/tioflex-raven.png`. Se muestra completo en el carrusel y en el pop-up.
 - Pop-up a los 3 segundos: solo la X o Cerrar y continuar permiten quitarlo. El fondo queda bloqueado y Escape no lo cierra.
 - Promociones del mes inmediatamente debajo del carrusel: tarjetas grandes deslizables, acceso a todas las ofertas y franjas de color entre apartados. Solo productos publicados y promociones vigentes; búsqueda y paginación en `/promociones`. El catálogo general se retiró de la navegación y sus enlaces antiguos redirigen a promociones. Se conservan las fichas informativas de producto. Sin carrito ni pagos.
 - Servicios: venta de medicamentos, aplicación de vacunas y aplicación de inyectables. Se retiró el portal de consultas según lo solicitado.
+- Cinco ubicaciones con horarios confirmados, teléfonos independientes y enlaces de mapas. Teléfono central, Instagram y Facebook generales. Puedes añadir más sucursales desde el panel.
+- Anuncios de proteína de arveja + BCAA, Enerpax y Fexofén del documento proporcionado, adaptados a Farmacova e incluidos en la selección de octubre.
 - Registro, ingreso, confirmación de correo, recuperación y cambio de contraseña mediante Supabase. Perfil protegido.
 
 ## Cambiar los anuncios
@@ -35,7 +37,7 @@ En la vista previa abre `/administracion/anuncios`, también disponible mediante
 
 **En modo de ejemplo los cambios se guardan solo en este navegador** mediante localStorage. No se publican para otros visitantes. Imágenes de hasta 2 MB; el límite total depende del navegador. En producción las campañas y las imágenes se guardan en Supabase y el acceso exige una cuenta de administrador.
 
-Para publicar: configurar Supabase, aplicar las cuatro migraciones y asignar `app_metadata.role = admin` a la cuenta elegida mediante una operación administrativa de Supabase. No usar `user_metadata` para conceder permisos. Renovar la sesión después de cambiar el rol. El usuario administrador tendrá un enlace al panel desde `/cuenta`. La clave administrativa nunca debe aparecer en el navegador ni en GitHub.
+Para publicar: configurar Supabase, aplicar las cinco migraciones y asignar `app_metadata.role = admin` a la cuenta elegida mediante una operación administrativa de Supabase. No usar `user_metadata` para conceder permisos. Renovar la sesión después de cambiar el rol. El usuario administrador tendrá un enlace al panel desde `/cuenta`. La clave administrativa nunca debe aparecer en el navegador ni en GitHub.
 
 ## Club Farmacova y panel completo
 
@@ -44,6 +46,8 @@ Tarjeta de **seis sellos**, uno por cada **₡10.000**, y cupón de **15% para u
 Las compras y los canjes se procesan de forma atómica en PostgreSQL, con facturas únicas y protección frente a reintentos. Por defecto las compras pequeñas se acumulan y los importes netos al canjear generan sellos; estas opciones se pueden configurar. Los cambios del panel en modo demo son locales y no publican datos reales.
 
 [Operación y activación del panel](ADMINISTRACION.md) · [Configurar Apple Wallet y certificados](APPLE-WALLET.md).
+
+[Promociones del documento y cinco ubicaciones](PROMOCIONES-Y-SUCURSALES.md).
 
 Apple Wallet emite un `.pkpass` firmado cuando se configuran los certificados privados. **Su progreso requiere volver a descargar la tarjeta después de comprar; no hay actualizaciones automáticas en Wallet en esta fase.** La tarjeta web consulta el saldo al cargar. Sin certificados, la descarga queda deshabilitada.
 
@@ -80,7 +84,7 @@ tests/
 
 ## Configurar Supabase
 
-1. Crea el proyecto y aplica, en orden, los archivos `202610010001_initial.sql`, `202610010002_marketing.sql`, `202610010003_campaigns.sql` y `202610020004_management_loyalty.sql` de `supabase/migrations/`. Incluyen catálogo, perfiles, publicidad, campañas, precios, sucursales, fidelidad, almacenamiento de imágenes y RLS. Si las primeras tres ya se aplicaron, ejecuta solamente la cuarta.
+1. Crea el proyecto y aplica, en orden, los cinco archivos de `supabase/migrations/`, desde `202610010001_initial.sql` hasta `202610030005_branches_monthly_promotions.sql`. Incluyen productos, perfiles, publicidad, campañas, precios, sucursales, fidelidad, imágenes y RLS. Si ya aplicaste las primeras cuatro, ejecuta solamente la quinta.
 2. Copia las variables en `.env.local` y en Vercel:
 
 ```dotenv

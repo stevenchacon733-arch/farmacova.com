@@ -1,3 +1,5 @@
+import { monthlyCampaigns } from "./monthly-products.ts";
+
 export type Campaign = {
   id: string;
   title: string;
@@ -63,6 +65,7 @@ export const demoCampaigns: Campaign[] = [
     starts_at: "2026-01-01T00:00:00Z",
     ends_at: "2099-01-01T00:00:00Z",
   },
+  ...monthlyCampaigns,
 ];
 
 export function safeCampaignHref(value: string): boolean {

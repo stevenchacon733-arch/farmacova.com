@@ -2,6 +2,7 @@ import {
   ClipboardList,
   HeartPulse,
   Pill,
+  Leaf,
   Wind,
   type LucideProps,
 } from "lucide-react";
@@ -12,6 +13,7 @@ export function CategoryIcon({
 }: LucideProps & { name: string }) {
   const icons = {
     pill: Pill,
+    leaf: Leaf,
     wind: Wind,
     heart: HeartPulse,
     clipboard: ClipboardList,

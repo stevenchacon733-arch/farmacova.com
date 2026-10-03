@@ -2,13 +2,19 @@ import Link from "next/link";
 import { BadgePercent, Search, CreditCard, MapPin } from "lucide-react";
 import { Brand } from "./brand";
 import { AccountLink } from "../auth/account-link";
+import { brandContact, phoneHref } from "@/lib/branches";
 
 export function Navbar() {
   return (
     <header className="relative z-20 bg-blue-950 text-white">
       <div className="border-b border-white/10">
         <div className="shell flex min-h-8 items-center justify-between gap-4 text-xs">
-          <span className="text-blue-100">Farmacova · Costa Rica</span>
+          <a
+            href={phoneHref(brandContact.phone)}
+            className="text-blue-100 hover:text-green-300"
+          >
+            Central: {brandContact.phone}
+          </a>
           <div className="flex items-center gap-4 py-2">
             <Link href="/servicios" className="hover:text-green-300">
               Servicios
@@ -23,9 +29,7 @@ export function Navbar() {
         </div>
       </div>
       <div className="shell flex flex-wrap items-center gap-x-8 gap-y-4 py-4">
-        <div className="rounded-sm bg-white px-3 py-1">
-          <Brand />
-        </div>
+        <Brand />
         <form
           action="/promociones"
           role="search"
