@@ -183,15 +183,15 @@ export default async function HomePage() {
         <div className="flex flex-col justify-between gap-6 rounded-2xl border border-slate-200 p-8 md:flex-row md:items-center">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight text-blue-950">
-              Sé parte de Farmacova.
+              Completa 6 sellos. Recibe un 15% de descuento.
             </h2>
             <p className="mt-3 text-sm text-slate-600">
-              Crea tu perfil de cliente frecuente. El catálogo está abierto para
-              todos.
+              Cada ₡10.000 en compras en la farmacia te da un sello. Únete al
+              Club Farmacova y lleva tu tarjeta contigo.
             </p>
           </div>
-          <Link href="/auth?mode=registro" className="btn-primary shrink-0">
-            Crear mi perfil
+          <Link href="/fidelidad" className="btn-primary shrink-0">
+            Conocer mi tarjeta
           </Link>
         </div>
       </section>

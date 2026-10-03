@@ -22,6 +22,11 @@ export type Product = {
   promotional: boolean;
   promotion_label: string | null;
   image_path: string | null;
+  price_crc?: number | null;
+  sale_price_crc?: number | null;
+  promotion_starts_at?: string | null;
+  promotion_ends_at?: string | null;
+  availability?: string;
 };
 export type SponsoredAd = {
   sponsor: string;
@@ -61,7 +66,7 @@ export const categories: Category[] = [
 ];
 
 // Solo ejemplos de catálogo: no representan inventario, precios ni ventas reales.
-const demoProducts: Product[] = [
+export const demoProducts: Product[] = [
   {
     slug: "tioflex",
     name: "Tioflex",
@@ -152,10 +157,23 @@ export function isDemoMode() {
   return process.env.FARMACOVA_DEMO_MODE === "true";
 }
 export function localImagePath(value: string | null): string | null {
-  return value &&
-    /^\/images\/[a-zA-Z0-9/_-]+\.(png|jpg|jpeg|webp)$/i.test(value)
-    ? value
-    : null;
+  if (!value) return null;
+  if (/^\/images\/[a-zA-Z0-9/_-]+\.(png|jpg|jpeg|webp)$/i.test(value))
+    return value;
+  try {
+    const url = new URL(value);
+    const base = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
+    return url.origin === base.origin &&
+      /^\/storage\/v1\/object\/public\/product-images\/[a-f0-9-]+\/[a-f0-9-]+\.(png|jpg|jpeg|webp)$/i.test(
+        url.pathname,
+      ) &&
+      !url.search &&
+      !url.hash
+      ? value
+      : null;
+  } catch {
+    return null;
+  }
 }
 function publicClient() {
   const { url, key } = getSupabaseConfig();
@@ -168,7 +186,7 @@ function publicClient() {
   });
 }
 const productFields =
-  "slug,name,brand,category_slug,description,presentation,requires_prescription,featured,bestseller_rank,promotional,promotion_label,image_path";
+  "slug,name,brand,category_slug,description,presentation,requires_prescription,featured,bestseller_rank,promotional,promotion_label,image_path,price_crc,sale_price_crc,promotion_starts_at,promotion_ends_at,availability";
 export const pageSize = 12;
 
 function inCollection(product: Product, collection: Collection) {

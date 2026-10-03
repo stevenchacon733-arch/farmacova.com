@@ -10,6 +10,7 @@ import {
   isStrongPassword,
   isValidEmail,
   passwordRules,
+  safeNext,
 } from "@/lib/validation";
 
 export type AuthMode = "ingreso" | "registro" | "recuperar" | "actualizar";
@@ -42,9 +43,11 @@ function friendlyAuthError(code?: string): string {
 export function AuthForm({
   mode = "ingreso",
   initialMessage = "",
+  next = "/cuenta",
 }: {
   mode?: AuthMode;
   initialMessage?: string;
+  next?: string;
 }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -138,7 +141,7 @@ export function AuthForm({
               email: normalizedEmail,
               password,
               options: {
-                emailRedirectTo: `${window.location.origin}/auth/callback`,
+                emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(safeNext(next))}`,
               },
             })
           : await client.auth.signInWithPassword({
@@ -164,7 +167,7 @@ export function AuthForm({
             setError("Confirma tu correo antes de ingresar.");
             return;
           }
-          router.replace("/cuenta");
+          router.replace(safeNext(next));
           router.refresh();
         }
       }

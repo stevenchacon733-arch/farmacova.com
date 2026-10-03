@@ -55,7 +55,7 @@ function localDate(value: string) {
   return new Date(Date.parse(value) - 6 * 3600000).toISOString().slice(0, 16);
 }
 function fromLocalDate(value: string) {
-  return value ? new Date(`${value}:00-06:00`).toISOString() : "";
+  return value ? new Date(`${value}-06:00`).toISOString() : "";
 }
 async function imageData(file: File): Promise<string> {
   return await new Promise((resolve, reject) => {
@@ -185,7 +185,13 @@ export function CampaignEditor({
     if (!draft || pending || uploading) return;
     setError("");
     setSuccess("");
-    const problem = validateCampaign(draft);
+    const form = new FormData(event.currentTarget);
+    const campaign = {
+      ...draft,
+      starts_at: fromLocalDate(String(form.get("starts_at") ?? "")),
+      ends_at: fromLocalDate(String(form.get("ends_at") ?? "")),
+    };
+    const problem = validateCampaign(campaign);
     if (problem) {
       setError(problem);
       return;
@@ -194,8 +200,8 @@ export function CampaignEditor({
     try {
       const current = availableItems();
       const updated = [
-        ...current.filter((item) => item.id !== draft.id),
-        draft,
+        ...current.filter((item) => item.id !== campaign.id),
+        campaign,
       ].sort((a, b) => a.position - b.position);
       if (demo) {
         if (updated.length > 50)
@@ -211,7 +217,7 @@ export function CampaignEditor({
       } else {
         const { error: saveError } = await createClient()
           .from("hero_campaigns")
-          .upsert(draft, { onConflict: "id" });
+          .upsert(campaign, { onConflict: "id" });
         if (saveError)
           throw new Error(
             "No pudimos guardar el anuncio. Revisa tu sesión de administrador y la conexión.",
@@ -289,6 +295,7 @@ export function CampaignEditor({
         </aside>
         {draft ? (
           <form
+            key={draft.id}
             onSubmit={save}
             className="space-y-5 rounded-2xl border border-slate-200 p-6 sm:p-8"
           >
@@ -464,9 +471,9 @@ export function CampaignEditor({
                 <input
                   id="campaign-start"
                   type="datetime-local"
-                  value={draft.starts_at ? localDate(draft.starts_at) : ""}
-                  onChange={(event) =>
-                    change("starts_at", fromLocalDate(event.target.value))
+                  name="starts_at"
+                  defaultValue={
+                    draft.starts_at ? localDate(draft.starts_at) : ""
                   }
                   className="field"
                   required
@@ -479,10 +486,8 @@ export function CampaignEditor({
                 <input
                   id="campaign-end"
                   type="datetime-local"
-                  value={draft.ends_at ? localDate(draft.ends_at) : ""}
-                  onChange={(event) =>
-                    change("ends_at", fromLocalDate(event.target.value))
-                  }
+                  name="ends_at"
+                  defaultValue={draft.ends_at ? localDate(draft.ends_at) : ""}
                   className="field"
                   required
                 />

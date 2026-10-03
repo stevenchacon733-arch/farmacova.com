@@ -51,7 +51,10 @@ export function normalizeSearch(value: string): string {
 
 export function safeNext(value: string | null, fallback = "/cuenta"): string {
   // Solo destinos internos conocidos; bloquea redirecciones abiertas.
-  return value === "/cuenta" || value === "/auth/actualizar-clave"
+  return value === "/cuenta" ||
+    value === "/fidelidad" ||
+    value === "/administracion" ||
+    value === "/auth/actualizar-clave"
     ? value
     : fallback;
 }

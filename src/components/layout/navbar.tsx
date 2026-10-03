@@ -68,6 +68,12 @@ export function Navbar() {
           </Link>
         </div>
         <Link
+          className="nav-link font-semibold text-blue-800"
+          href="/fidelidad"
+        >
+          Club Farmacova · 15%
+        </Link>
+        <Link
           href="/promociones"
           className="flex items-center gap-2 font-semibold text-green-700 hover:text-green-800"
         >

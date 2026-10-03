@@ -35,7 +35,17 @@ En la vista previa abre `/administracion/anuncios`, también disponible mediante
 
 **En modo de ejemplo los cambios se guardan solo en este navegador** mediante localStorage. No se publican para otros visitantes. Imágenes de hasta 2 MB; el límite total depende del navegador. En producción las campañas y las imágenes se guardan en Supabase y el acceso exige una cuenta de administrador.
 
-Para publicar: configurar Supabase, aplicar las tres migraciones y asignar `app_metadata.role = admin` a la cuenta elegida mediante el panel de Supabase o una operación del servidor con Admin API. No usar `user_metadata` para conceder permisos. Renovar la sesión después de cambiar el rol. El usuario administrador tendrá un enlace al panel desde `/cuenta`. La clave administrativa nunca debe aparecer en el navegador ni en GitHub.
+Para publicar: configurar Supabase, aplicar las cuatro migraciones y asignar `app_metadata.role = admin` a la cuenta elegida mediante una operación administrativa de Supabase. No usar `user_metadata` para conceder permisos. Renovar la sesión después de cambiar el rol. El usuario administrador tendrá un enlace al panel desde `/cuenta`. La clave administrativa nunca debe aparecer en el navegador ni en GitHub.
+
+## Club Farmacova y panel completo
+
+Tarjeta de **seis sellos**, uno por cada **₡10.000**, y cupón de **15% para una compra posterior** al completar la tarjeta. `/fidelidad` muestra la tarjeta y permite inscribirse con correo confirmado. `/administracion` reúne productos, precios, promociones, anuncios, clientes, compras en sucursal, canjes, sucursales, condiciones e historial.
+
+Las compras y los canjes se procesan de forma atómica en PostgreSQL, con facturas únicas y protección frente a reintentos. Por defecto las compras pequeñas se acumulan y los importes netos al canjear generan sellos; estas opciones se pueden configurar. Los cambios del panel en modo demo son locales y no publican datos reales.
+
+[Operación y activación del panel](ADMINISTRACION.md) · [Configurar Apple Wallet y certificados](APPLE-WALLET.md).
+
+Apple Wallet emite un `.pkpass` firmado cuando se configuran los certificados privados. **Su progreso requiere volver a descargar la tarjeta después de comprar; no hay actualizaciones automáticas en Wallet en esta fase.** La tarjeta web consulta el saldo al cargar. Sin certificados, la descarga queda deshabilitada.
 
 ## Estructura
 
@@ -70,7 +80,7 @@ tests/
 
 ## Configurar Supabase
 
-1. Crea el proyecto y aplica, en orden, los archivos `202610010001_initial.sql`, `202610010002_marketing.sql` y `202610010003_campaigns.sql` de `supabase/migrations/`. Incluyen catálogo, perfiles, publicidad, campañas, almacenamiento de imágenes y RLS.
+1. Crea el proyecto y aplica, en orden, los archivos `202610010001_initial.sql`, `202610010002_marketing.sql`, `202610010003_campaigns.sql` y `202610020004_management_loyalty.sql` de `supabase/migrations/`. Incluyen catálogo, perfiles, publicidad, campañas, precios, sucursales, fidelidad, almacenamiento de imágenes y RLS. Si las primeras tres ya se aplicaron, ejecuta solamente la cuarta.
 2. Copia las variables en `.env.local` y en Vercel:
 
 ```dotenv
@@ -128,7 +138,7 @@ npm run build
 npm run typecheck
 ```
 
-GitHub Actions ejecuta estas comprobaciones. Las pruebas cubren correo, contraseñas, redirecciones, campañas, vigencia y orden. `supabase/tests/rls.sql` puede ejecutarse en un proyecto de prueba.
+GitHub Actions ejecuta estas comprobaciones. Las pruebas cubren correo, contraseñas, redirecciones, campañas, sellos e importes, migraciones y RLS en PostgreSQL embebido, cupones de uso único y la firma CMS del pase con certificados de prueba. `supabase/tests/rls.sql` puede ejecutarse en un proyecto de prueba. No sustituye la verificación del proyecto Supabase real ni del pase en iPhone.
 
 En entornos que impiden crear procesos secundarios se incluye un ajuste opcional: `FARMACOVA_RESTRICTED_BUILD=true` con `next build --webpack`. No es necesario para Vercel.
 

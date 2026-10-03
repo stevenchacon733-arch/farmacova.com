@@ -16,6 +16,16 @@ export default function PrivacyPage() {
           Auth. Las cookies de sesión permiten mantener tu acceso al perfil.
           Explorar medicamentos, promociones y servicios no requiere registro.
         </p>
+        <h2 className="text-xl font-bold text-blue-950">Club Farmacova</h2>
+        <p>
+          Para emitir tu tarjeta se guardan tu nombre, un identificador de
+          socio, la aceptación de las condiciones, los importes y referencias de
+          facturas, los sellos y los canjes. El equipo autorizado de Farmacova
+          administra estos registros. La tarjeta descargada para Apple Wallet
+          incluye tu nombre, identificador, sellos y cupones disponibles en el
+          momento de descargarla. Su QR identifica tu tarjeta; el canje requiere
+          validación en sucursal.
+        </p>
         <h2 className="text-xl font-bold text-blue-950">
           Información del catálogo
         </h2>

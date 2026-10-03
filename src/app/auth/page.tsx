@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
 import { AuthForm, type AuthMode } from "@/components/auth/auth-form";
+import { safeNext } from "@/lib/validation";
 
 export const metadata: Metadata = {
   title: "Tu cuenta",
@@ -11,9 +12,15 @@ export const metadata: Metadata = {
 export default async function AuthPage({
   searchParams,
 }: {
-  searchParams: Promise<{ mode?: string; error?: string; confirmado?: string }>;
+  searchParams: Promise<{
+    mode?: string;
+    error?: string;
+    confirmado?: string;
+    next?: string;
+  }>;
 }) {
   const params = await searchParams;
+  const next = safeNext(params.next ?? null);
   const mode: AuthMode =
     params.mode === "registro"
       ? "registro"
@@ -53,13 +60,13 @@ export default async function AuthPage({
       <div className="mx-auto w-full max-w-md">
         <div className="mb-8 flex rounded-full bg-slate-100 p-1">
           <Link
-            href="/auth"
+            href={`/auth?next=${encodeURIComponent(next)}`}
             className={`flex-1 rounded-full py-3 text-center text-sm font-semibold ${mode === "ingreso" ? "bg-white text-blue-900 shadow-sm" : "text-slate-500"}`}
           >
             Ingresar
           </Link>
           <Link
-            href="/auth?mode=registro"
+            href={`/auth?mode=registro&next=${encodeURIComponent(next)}`}
             className={`flex-1 rounded-full py-3 text-center text-sm font-semibold ${mode === "registro" ? "bg-white text-blue-900 shadow-sm" : "text-slate-500"}`}
           >
             Crear perfil
@@ -72,7 +79,12 @@ export default async function AuthPage({
               ? "Crea tu cuenta"
               : "Ingresa a tu perfil"}
         </h2>
-        <AuthForm key={mode} mode={mode} initialMessage={initialMessage} />
+        <AuthForm
+          key={mode}
+          mode={mode}
+          initialMessage={initialMessage}
+          next={next}
+        />
       </div>
     </div>
   );

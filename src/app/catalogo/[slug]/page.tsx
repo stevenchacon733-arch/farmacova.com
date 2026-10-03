@@ -9,6 +9,7 @@ import {
   localImagePath,
 } from "@/lib/catalog";
 import { CategoryIcon } from "@/components/ui/category-icon";
+import { ProductPrice } from "@/components/catalog/product-price";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,7 @@ export default async function ProductPage({
             {product.name}
           </h1>
           <p className="mt-4 text-slate-500">{product.presentation}</p>
+          <ProductPrice product={product} />
           <p className="mt-6 leading-relaxed text-slate-600">
             {product.description}
           </p>

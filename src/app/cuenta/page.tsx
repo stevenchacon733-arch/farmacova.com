@@ -48,6 +48,9 @@ export default async function AccountPage() {
           </p>
         )}
         <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/fidelidad" className="btn-primary">
+            Mi tarjeta de fidelidad
+          </Link>
           <Link href="/catalogo" className="btn-primary">
             Explorar catálogo
           </Link>
@@ -55,8 +58,8 @@ export default async function AccountPage() {
             Ver promociones
           </Link>
           {user.app_metadata.role === "admin" && (
-            <Link href="/administracion/anuncios" className="btn-secondary">
-              Administrar anuncios
+            <Link href="/administracion" className="btn-secondary">
+              Administrar farmacia
             </Link>
           )}
         </div>

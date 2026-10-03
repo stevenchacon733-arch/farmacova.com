@@ -67,8 +67,9 @@ export const demoCampaigns: Campaign[] = [
 
 export function safeCampaignHref(value: string): boolean {
   return (
-    /^\/(catalogo|promociones|servicios|sucursales)(\/|\?|$)/.test(value) &&
-    !/[\s\\]/.test(value)
+    /^\/(catalogo|promociones|servicios|sucursales|fidelidad)(\/|\?|$)/.test(
+      value,
+    ) && !/[\s\\]/.test(value)
   );
 }
 export function activeCampaigns(
@@ -126,7 +127,7 @@ export function validateCampaign(item: Campaign): string | null {
     item.cta_label.length > 60 ||
     !safeCampaignHref(item.cta_href)
   )
-    return "Agrega un botón y una ruta interna válida del catálogo, promociones, servicios o sucursales.";
+    return "Agrega un botón y una ruta interna válida del catálogo, promociones, servicios, sucursales o fidelidad.";
   if (item.sponsored && !item.sponsor.trim())
     return "Indica el laboratorio o patrocinador.";
   if (

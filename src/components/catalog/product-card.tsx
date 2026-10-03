@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { categories, localImagePath, type Product } from "@/lib/catalog";
+import { ProductPrice } from "./product-price";
 import { CategoryIcon } from "../ui/category-icon";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -47,6 +48,7 @@ export function ProductCard({ product }: { product: Product }) {
             Requiere receta
           </span>
         )}
+        <ProductPrice product={product} />
         <Link
           className="mt-auto block pt-6 text-sm font-semibold text-blue-800 underline decoration-blue-200 underline-offset-4 hover:decoration-blue-800"
           href={`/catalogo/${product.slug}`}
