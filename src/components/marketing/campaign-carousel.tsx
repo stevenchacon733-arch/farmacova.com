@@ -14,6 +14,7 @@ import {
   campaignStorageKey,
   parsePreviewCampaigns,
   safeCampaignHref,
+  uniqueCampaignImages,
   type Campaign,
 } from "@/lib/campaigns";
 
@@ -62,7 +63,7 @@ export function CampaignCarousel({
     ? `${configuredUrl}/storage/v1/object/public/campaign-images/`
     : null;
   // An image-only carousel skips campaigns that do not yet have an image.
-  const slides = availableSlides.filter((item) => {
+  const slides = uniqueCampaignImages(availableSlides).filter((item) => {
     const path = item.image_path;
     return path && (
       /^\/images\/[a-zA-Z0-9/_-]+\.(png|jpg|jpeg|webp)$/i.test(path) ||

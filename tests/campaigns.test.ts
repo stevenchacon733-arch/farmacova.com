@@ -6,7 +6,17 @@ import {
   parsePreviewCampaigns,
   safeCampaignHref,
   validateCampaign,
+  uniqueCampaignImages,
 } from "../src/lib/campaigns.ts";
+
+test("carrusel: omitir imágenes repetidas de vistas previas anteriores", () => {
+  const original = demoCampaigns[0];
+  const duplicate = { ...original, id: "old-preview", cta_href: "/promociones" };
+  const other = { ...original, id: "other", image_path: "/images/other.webp" };
+  const items = [original, { ...original, image_path: null }, duplicate, other];
+  assert.deepEqual(uniqueCampaignImages(items), [original, other]);
+  assert.equal(items.length, 4);
+});
 
 test("campañas: respetar vigencia, estado y orden", () => {
   const now = Date.parse("2026-10-01T18:00:00Z");

@@ -49,24 +49,18 @@ export const demoCampaigns: Campaign[] = [
     starts_at: "2026-01-01T00:00:00Z",
     ends_at: "2099-01-01T00:00:00Z",
   },
-  {
-    id: "33333333-3333-4333-8333-333333333333",
-    title: "Dale un vistazo\na nuestras campañas.",
-    eyebrow: "Promociones Farmacova",
-    description:
-      "Descubre productos destacados y campañas de nuestros laboratorios. Condiciones y disponibilidad en sucursal.",
-    image_path: "/images/tioflex-raven.png",
-    cta_label: "Ver promociones",
-    cta_href: "/promociones",
-    sponsored: false,
-    sponsor: "",
-    position: 3,
-    active: true,
-    starts_at: "2026-01-01T00:00:00Z",
-    ends_at: "2099-01-01T00:00:00Z",
-  },
   ...monthlyCampaigns,
 ];
+
+// Also covers older previews saved in the browser and repeated database records.
+export function uniqueCampaignImages(items: Campaign[]): Campaign[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    if (!item.image_path || seen.has(item.image_path)) return false;
+    seen.add(item.image_path);
+    return true;
+  });
+}
 
 export function safeCampaignHref(value: string): boolean {
   return (

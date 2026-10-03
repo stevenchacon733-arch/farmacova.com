@@ -3,7 +3,7 @@
 ## Comprobado localmente
 
 - Compilación de producción de Next.js, TypeScript y ESLint sin errores.
-- 17 pruebas automatizadas: autenticación/validación, enlaces seguros, campañas, cálculo monetario y sellos, las cinco migraciones, permisos RLS, reintentos, facturas únicas, cupón de canje único y firma CMS del `.pkpass`.
+- 18 pruebas automatizadas: autenticación/validación, enlaces seguros, campañas, cálculo monetario y sellos, las seis migraciones, permisos RLS, reintentos, facturas únicas, cupón de canje único y firma CMS del `.pkpass`.
 - Las migraciones se ejecutaron en PostgreSQL embebido (PGlite) con sustitutos de auth/storage. Se probó que un cliente no aumenta su saldo, otro cliente no lee su tarjeta y anónimo no lee membresías. Se probó ₡5.000 + ₡5.000, seis sellos, canje de 15%, reintentos y rechazo de un segundo canje.
 - La firma del pase se verificó criptográficamente con un certificado temporal de prueba; el manifiesto alterado se rechazó. Incluye certificado firmante, certificado intermedio y atributo de fecha. Ninguna clave de prueba se guarda en el repositorio.
 - Navegador: seis clicks de prueba completan seis espacios y muestran un cupón. En el panel, ₡60.000 generan seis sellos; canjear en una compra nueva de ₡20.000 aplica ₡3.000 de descuento, consume el cupón y acumula sobre ₡17.000 según configuración inicial.
@@ -15,7 +15,7 @@
 
 ## Requiere configuración del propietario
 
-- Proyecto Supabase real: aplicar la quinta migración si ya existen las cuatro primeras, configurar las variables, poner `FARMACOVA_DEMO_MODE=false`, verificar correo/contraseñas y asignar el rol administrativo desde un entorno de confianza.
+- Proyecto Supabase real: aplicar la sexta migración si ya existen las cinco primeras, configurar las variables, poner `FARMACOVA_DEMO_MODE=false`, verificar correo/contraseñas y asignar el rol administrativo desde un entorno de confianza.
 - Prueba con dos administradores simultáneos en el proyecto remoto; las transacciones usan bloqueos por tarjeta/factura pero no se verificaron contra un Supabase remoto sin credenciales.
 - Certificados reales Pass Type ID/WWDR y prueba en un iPhone. La presencia de variables no confirma que Apple acepte el pase.
 - Configurar Vercel, dominio HTTPS y redirecciones de Auth. Actualizar GitHub no equivale a confirmar un despliegue exitoso de Vercel.

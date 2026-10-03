@@ -16,7 +16,7 @@ En `/administracion/sucursales` puedes añadir más ubicaciones, modificar horar
 
 Proteína de arveja + BCAA, Enerpax y Fexofén se cargan como la selección de octubre de 2026. Vigencia: 1 de octubre a las 00:00 hasta el 1 de noviembre a las 00:00, en horario de Costa Rica. Cambia las fechas desde **Productos** y **Anuncios** para las próximas campañas. No se inventaron precios, porcentajes de descuento, existencias ni requisitos de receta. Los anuncios nuevos no se etiquetan como patrocinio pagado.
 
-Las fichas individuales conservan «Ver detalles» y la confirmación de disponibilidad en sucursal. El anuncio inicial de Tioflex permanece disponible.
+Las fichas individuales conservan «Ver detalles» y la confirmación de disponibilidad en sucursal. Tioflex aparece una sola vez en el carrusel. El pop-up usa la imagen original de Fast&Up suministrada el 3 de octubre, sin modificaciones. Para actualizar el pop-up conectado a Supabase, aplicar también `202610030006_fast_up_popup.sql` después de la quinta migración.
 
 ## Imágenes y marca
 

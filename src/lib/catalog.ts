@@ -154,12 +154,12 @@ export const demoProducts: Product[] = [
 ];
 
 export const defaultAd: SponsoredAd = {
-  sponsor: "Laboratorios Raven",
-  product: "Tioflex",
-  headline: "Vuelve a tu ritmo sin dolor",
+  sponsor: "Fast&Up",
+  product: "Fast&Up Vitamina C + D3 + Zinc",
+  headline: "Tabletas efervescentes sabor naranja",
   description:
-    "Campaña de Tioflex de Laboratorios Raven. Consulta condiciones y disponibilidad en sucursal.",
-  image_path: "/images/tioflex-raven.png",
+    "Campaña de Fast&Up. Consulta condiciones y disponibilidad en sucursal.",
+  image_path: "/images/fast-up-vitamina-c-d3-zinc.jpeg",
 };
 
 export function isDemoMode() {
