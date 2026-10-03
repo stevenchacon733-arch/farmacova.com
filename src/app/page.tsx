@@ -18,6 +18,7 @@ export default async function HomePage() {
   ]);
   return (
     <>
+      <h1 className="sr-only">Farmacova: promociones y productos del mes</h1>
       <div className="border-b border-slate-200 bg-white">
         <div className="shell grid grid-cols-3 divide-x divide-slate-200 text-center text-xs sm:text-sm">
           <p className="px-4 py-4">

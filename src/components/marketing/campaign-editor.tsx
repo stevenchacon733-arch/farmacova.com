@@ -315,7 +315,7 @@ export function CampaignEditor({
             </div>
             <div>
               <label className="field-label" htmlFor="campaign-title">
-                Título principal
+                Título para identificar el anuncio
               </label>
               <textarea
                 id="campaign-title"
@@ -355,7 +355,7 @@ export function CampaignEditor({
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <label htmlFor="campaign-button" className="field-label">
-                  Texto del botón
+                  Etiqueta accesible del enlace
                 </label>
                 <input
                   id="campaign-button"
@@ -368,7 +368,7 @@ export function CampaignEditor({
               </div>
               <div>
                 <label htmlFor="campaign-link" className="field-label">
-                  Destino del botón
+                  Destino al tocar la imagen
                 </label>
                 <input
                   id="campaign-link"
@@ -394,6 +394,8 @@ export function CampaignEditor({
               />
               <p className="mt-2 text-xs text-slate-500">
                 PNG, JPG o WebP. La imagen se muestra completa, sin recortarla.
+                El carrusel muestra solo la imagen; los textos no se superponen.
+                Los anuncios sin imagen quedan ocultos en la portada.
               </p>
               {uploading && (
                 <p className="mt-3 text-sm text-blue-800" role="status">
@@ -415,7 +417,7 @@ export function CampaignEditor({
                     onClick={() => change("image_path", null)}
                     className="mt-3 text-xs font-semibold text-blue-800 underline"
                   >
-                    Usar diseño sin imagen
+                    Quitar imagen
                   </button>
                 </div>
               )}

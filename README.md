@@ -21,7 +21,7 @@ Abre http://localhost:3000. Para ejecutar una compilación de producción: `npm 
 ## Diseño y funciones
 
 - Logo oficial proporcionado por Farmacova, con eslogan CUIDAMOS DE TI y fondo transparente, integrado directamente en el encabezado.
-- Encabezado azul marino, pestaña verde de ofertas, búsqueda amplia y carrusel a todo el ancho, con texto a la izquierda e imagen a la derecha, siguiendo las nuevas referencias.
+- Encabezado azul marino, pestaña verde de ofertas, búsqueda amplia y carrusel a todo el ancho, solo con imágenes completas y centradas, sin títulos, descripciones ni botones visibles, siguiendo las nuevas referencias.
 - Cambio automático cada 6 segundos, flechas, puntos, teclado y deslizamiento táctil. Botón para pausar/reanudar. Se pausa al pasar el cursor, al mantener el foco dentro, con la pestaña oculta y mientras hay un modal abierto. Respeta la preferencia de movimiento reducido.
 - Anuncio real de Raven/Tioflex incluido en `public/images/tioflex-raven.png`. Se muestra completo en el carrusel y en el pop-up.
 - Pop-up a los 3 segundos: solo la X o Cerrar y continuar permiten quitarlo. El fondo queda bloqueado y Escape no lo cierra.
@@ -33,7 +33,7 @@ Abre http://localhost:3000. Para ejecutar una compilación de producción: `npm 
 
 ## Cambiar los anuncios
 
-En la vista previa abre `/administracion/anuncios`, también disponible mediante Editar carrusel en la portada. Permite crear campañas, subir imágenes PNG/JPG/WebP, cambiar textos y botones, ordenar, activar/desactivar, definir vigencia e identificar patrocinadores.
+Abre `/administracion/anuncios` desde el panel. Permite subir imágenes PNG/JPG/WebP, configurar el enlace de cada imagen, ordenar, activar/desactivar, definir vigencia e identificar patrocinadores. Los textos se conservan como información administrativa y accesible; no aparecen sobre el carrusel. Las campañas sin imagen quedan ocultas.
 
 **En modo de ejemplo los cambios se guardan solo en este navegador** mediante localStorage. No se publican para otros visitantes. Imágenes de hasta 2 MB; el límite total depende del navegador. En producción las campañas y las imágenes se guardan en Supabase y el acceso exige una cuenta de administrador.
 

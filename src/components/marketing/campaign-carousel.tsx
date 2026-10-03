@@ -8,8 +8,6 @@ import {
   ChevronRight,
   Pause,
   Play,
-  Pill,
-  Plus,
 } from "lucide-react";
 import {
   activeCampaigns,
@@ -56,9 +54,22 @@ export function CampaignCarousel({
     demo ? previewSnapshot : emptySnapshot,
     emptySnapshot,
   );
-  const slides = demo
+  const availableSlides = demo
     ? activeCampaigns(parsePreviewCampaigns(preview, campaigns))
     : campaigns;
+  const configuredUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const storagePrefix = configuredUrl
+    ? `${configuredUrl}/storage/v1/object/public/campaign-images/`
+    : null;
+  // An image-only carousel skips campaigns that do not yet have an image.
+  const slides = availableSlides.filter((item) => {
+    const path = item.image_path;
+    return path && (
+      /^\/images\/[a-zA-Z0-9/_-]+\.(png|jpg|jpeg|webp)$/i.test(path) ||
+      /^data:image\/(png|jpeg|webp);base64,/.test(path) ||
+      (storagePrefix && path.startsWith(storagePrefix))
+    );
+  });
   const [selected, setSelected] = useState(0);
   const [autoChoice, setAutoChoice] = useState<boolean | null>(null);
   const [hovered, setHovered] = useState(false);
@@ -84,21 +95,7 @@ export function CampaignCarousel({
     setSelected(
       (current) => (current + direction + slides.length) % slides.length,
     );
-  const configuredUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const storagePrefix = configuredUrl
-    ? `${configuredUrl}/storage/v1/object/public/campaign-images/`
-    : null;
-  const imagePath =
-    slide?.image_path &&
-    (/^\/images\/[a-zA-Z0-9/_-]+\.(png|jpg|jpeg|webp)$/i.test(
-      slide.image_path,
-    ) ||
-      slide.image_path.startsWith("data:image/png;base64,") ||
-      slide.image_path.startsWith("data:image/jpeg;base64,") ||
-      slide.image_path.startsWith("data:image/webp;base64,") ||
-      (storagePrefix && slide.image_path.startsWith(storagePrefix)))
-      ? slide.image_path
-      : null;
+  if (!slide?.image_path) return null;
 
   return (
     <section
@@ -137,73 +134,22 @@ export function CampaignCarousel({
         touch.current = null;
       }}
     >
-      <div
-        key={slide?.id ?? "empty"}
-        className="hero-slide shell grid min-h-[480px] items-center gap-8 px-5 pb-24 pt-10 md:grid-cols-2 md:gap-12 md:px-12 lg:min-h-[530px]"
-      >
-        <div className="order-2 flex justify-center">
-          {imagePath ? (
-            <Image
-              src={imagePath}
-              alt={
-                slide.sponsored ? `Anuncio de ${slide.sponsor}` : slide.eyebrow
-              }
-              width={554}
-              height={554}
-              sizes="(max-width: 768px) calc(100vw - 80px), 420px"
-              className="max-h-[330px] w-auto max-w-full rounded-sm object-contain shadow-xl shadow-blue-950/10 md:max-h-[400px]"
-              unoptimized
-            />
-          ) : (
-            <div className="w-full max-w-sm space-y-4">
-              {["Productos del mes", "Ofertas especiales", "Promociones"].map(
-                (text, itemIndex) => (
-                  <div
-                    key={text}
-                    className={`flex items-center gap-5 rounded-sm border border-blue-200 bg-white/80 px-6 py-5 text-blue-900 shadow-lg shadow-blue-950/5 ${itemIndex === 1 ? "ml-7" : "mr-7"}`}
-                  >
-                    <Pill size={36} strokeWidth={1.2} aria-hidden="true" />
-                    <span className="text-lg font-semibold">{text}</span>
-                  </div>
-                ),
-              )}
-            </div>
-          )}
-        </div>
-        <div
-          className="order-1"
-          aria-live={autoPlay && !hovered && !focused ? "off" : "polite"}
-          aria-atomic="true"
+      <div className={slides.length > 1 ? "pb-14" : ""}>
+        <Link
+          key={slide.id}
+          href={safeCampaignHref(slide.cta_href) ? slide.cta_href : "/promociones"}
+          className="hero-slide relative block h-[clamp(320px,65vw,560px)] w-full"
+          aria-label={`${slide.cta_label}: ${slide.title}`}
         >
-          <span className="text-xs font-bold uppercase tracking-[0.15em] text-green-700">
-            {slide?.eyebrow ?? "Farmacova · Cuidamos de ti"}
-          </span>
-          <h1 className="mt-4 whitespace-pre-line text-4xl font-bold leading-[1.15] tracking-[-0.035em] sm:text-5xl">
-            {slide?.title ?? "Tu farmacia.\nMás cerca de ti."}
-          </h1>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-slate-600">
-            {slide?.description ??
-              "Descubre las promociones del mes y confirma su disponibilidad en sucursal."}
-          </p>
-          <Link
-            href={
-              slide && safeCampaignHref(slide.cta_href)
-                ? slide.cta_href
-                : "/promociones"
-            }
-            className="mt-7 inline-flex min-w-60 items-center justify-center gap-3 rounded-sm bg-green-600 px-6 py-4 text-base font-bold text-white hover:bg-green-700"
-          >
-            {slide?.cta_label ?? "Ver promociones"}
-            <span className="flex h-5 w-5 items-center justify-center">
-              <Plus size={13} aria-hidden="true" />
-            </span>
-          </Link>
-          {slide?.sponsored && (
-            <p className="mt-4 text-xs text-slate-600">
-              Espacio patrocinado por {slide.sponsor}
-            </p>
-          )}
-        </div>
+          <Image
+            src={slide.image_path}
+            alt={slide.sponsored ? `${slide.title}. Anuncio de ${slide.sponsor}` : slide.title}
+            fill
+            sizes="100vw"
+            className="object-contain"
+            unoptimized
+          />
+        </Link>
       </div>
       {slides.length > 1 && (
         <>
@@ -225,7 +171,7 @@ export function CampaignCarousel({
           </button>
         </>
       )}
-      <div className="absolute bottom-5 left-6 right-6 flex flex-wrap items-center justify-between gap-3 md:left-14 md:right-14">
+      {slides.length > 1 && <div className="absolute bottom-3 left-6 right-6 flex items-center justify-center gap-5">
         <div className="flex max-w-full flex-wrap items-center gap-2">
           {slides.map((item, itemIndex) => (
             <button
@@ -239,14 +185,6 @@ export function CampaignCarousel({
           ))}
         </div>
         <div className="flex items-center gap-3">
-          {demo && (
-            <Link
-              href="/administracion/anuncios"
-              className="text-xs text-blue-900 underline underline-offset-4"
-            >
-              Editar carrusel
-            </Link>
-          )}
           {slides.length > 1 && (
             <>
               <button
@@ -261,13 +199,10 @@ export function CampaignCarousel({
                   <Play size={17} aria-hidden="true" />
                 )}
               </button>
-              <span className="text-xs text-blue-900">
-                {index + 1} / {slides.length}
-              </span>
             </>
           )}
         </div>
-      </div>
+      </div>}
     </section>
   );
 }
