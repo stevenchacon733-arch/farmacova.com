@@ -1,7 +1,7 @@
 import "server-only";
 import sharp from "sharp";
 import { X509Certificate } from "node:crypto";
-import { visibleStamps, type Member } from "@/lib/loyalty";
+import { POINTS_TARGET, visiblePoints, type Member } from "@/lib/loyalty";
 import { signPass } from "./sign";
 import { walletConfigured } from "./config";
 
@@ -27,8 +27,8 @@ export async function generatePass(
     throw new Error("WALLET_CERTIFICATE_MISMATCH");
   const base = new URL(process.env.SITE_URL!);
   if (base.protocol !== "https:") throw new Error("HTTPS_REQUIRED");
-  const stamps = visibleStamps(member.total_stamps, available);
-  const strip = `<svg xmlns="http://www.w3.org/2000/svg" width="375" height="123"><rect width="375" height="123" fill="#1e40af"/>${Array.from({ length: 6 }, (_, i) => `<rect x="${16 + i * 59}" y="29" width="48" height="60" rx="12" fill="${i < stamps ? "#16a34a" : "#3559b3"}"/><text x="${40 + i * 59}" y="68" text-anchor="middle" font-family="Arial" font-size="25" fill="white">${i < stamps ? "✓" : i + 1}</text>`).join("")}</svg>`;
+  const points = visiblePoints(member.total_stamps, available);
+  const strip = `<svg xmlns="http://www.w3.org/2000/svg" width="375" height="123"><rect width="375" height="123" fill="#1e40af"/><text x="16" y="56" font-family="Arial" font-size="34" font-weight="bold" fill="white">${points} / ${POINTS_TARGET} Cova Puntos</text><rect x="16" y="76" width="343" height="20" rx="10" fill="#3559b3"/><rect x="16" y="76" width="${Math.round((343 * points) / POINTS_TARGET)}" height="20" rx="10" fill="#16a34a"/></svg>`;
   const icon =
     '<svg xmlns="http://www.w3.org/2000/svg" width="87" height="87"><rect width="87" height="87" rx="20" fill="#1e40af"/><path d="M34 16h19v18h18v19H53v18H34V53H16V34h18z" fill="#22c55e"/></svg>';
   const files: Record<string, Uint8Array> = {};
@@ -53,7 +53,7 @@ export async function generatePass(
       teamIdentifier: process.env.APPLE_WALLET_TEAM_ID,
       serialNumber: member.id,
       organizationName: "Farmacova",
-      description: "Tarjeta de fidelidad Farmacova",
+      description: "Cova Puntos Farmacova",
       logoText: "Farmacova · CUIDAMOS DE TI",
       backgroundColor: "rgb(30,64,175)",
       foregroundColor: "rgb(255,255,255)",
@@ -65,8 +65,8 @@ export async function generatePass(
           { key: "name", label: "CLIENTE", value: member.display_name },
           {
             key: "progress",
-            label: "SELLOS AL ACTUALIZAR",
-            value: `${stamps}/6`,
+            label: "PUNTOS AL ACTUALIZAR",
+            value: `${points}/${POINTS_TARGET}`,
           },
         ],
         auxiliaryFields: [
@@ -76,7 +76,7 @@ export async function generatePass(
           {
             key: "rules",
             label: "CÓMO FUNCIONA",
-            value: `Un sello por cada ₡10.000. Completa seis sellos para obtener un cupón de 15% para una compra posterior. Canje único en sucursal. ${terms}`,
+            value: `Un Cova Punto por cada ₡1.000. Junta 60 puntos para obtener un cupón de 15% para una compra posterior. Canje único en sucursal. ${terms}`,
           },
           {
             key: "updated",
@@ -85,14 +85,14 @@ export async function generatePass(
           },
           {
             key: "live",
-            label: "VER MI TARJETA ACTUAL",
+            label: "VER MIS PUNTOS ACTUALES",
             value: new URL("/fidelidad", base).href,
           },
           {
             key: "refresh",
-            label: "ACTUALIZAR LOS SELLOS",
+            label: "ACTUALIZAR LOS PUNTOS",
             value:
-              "Después de comprar o canjear, abre tu tarjeta web y pulsa Agregar a Apple Wallet nuevamente. Se reemplaza esta misma tarjeta.",
+              "Después de comprar o canjear, abre Cova Puntos en la web y pulsa Agregar a Apple Wallet nuevamente. Se reemplaza esta misma tarjeta.",
           },
         ],
       },

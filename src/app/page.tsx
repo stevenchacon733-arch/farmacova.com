@@ -30,10 +30,10 @@ export default async function HomePage() {
             </span>
           </p>
           <p className="px-4 py-4">
-            <strong className="text-green-700">Club Farmacova</strong>
+            <strong className="text-green-700">Cova Puntos</strong>
             <br />
             <span className="mt-1 hidden text-slate-600 sm:inline-block">
-              6 sellos, un 15% de descuento
+              60 puntos, un 15% de descuento
             </span>
           </p>
           <p className="px-4 py-4">
@@ -135,18 +135,18 @@ export default async function HomePage() {
           <div>
             <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-blue-950">
               <CreditCard className="shrink-0" size={28} aria-hidden="true" />
-              Completa 6 sellos. Recibe un 15% de descuento.
+              Junta 60 Cova Puntos. Recibe un 15% de descuento.
             </h2>
             <p className="mt-3 text-sm text-slate-600">
-              Cada ₡10.000 en compras en la farmacia te da un sello. Únete al
-              Club Farmacova y lleva tu tarjeta contigo.
+              Cada ₡1.000 en compras en la farmacia te da un Cova Punto. Únete
+              gratis y lleva tus puntos contigo.
             </p>
           </div>
           <Link
             href="/fidelidad"
             className="shrink-0 rounded-sm bg-blue-900 px-8 py-3 text-center font-semibold text-white hover:bg-blue-800"
           >
-            Conocer mi tarjeta
+            Ver mis Cova Puntos
           </Link>
         </div>
       </section>

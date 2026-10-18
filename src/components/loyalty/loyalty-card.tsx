@@ -1,12 +1,13 @@
 "use client";
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { Check, Plus, Gift } from "lucide-react";
+import { Plus, Gift } from "lucide-react";
 import {
   accrue,
   crc,
   demoMember,
-  visibleStamps,
+  POINTS_TARGET,
+  visiblePoints,
   type Member,
   type Reward,
 } from "@/lib/loyalty";
@@ -43,7 +44,7 @@ export function LoyaltyCard({
   const available = demo
     ? sampleRewards
     : rewards.filter((r) => !r.redeemed_at).length;
-  const filled = visibleStamps(card?.total_stamps ?? 0, available);
+  const filled = visiblePoints(card?.total_stamps ?? 0, available);
   return (
     <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
       <div>
@@ -58,32 +59,36 @@ export function LoyaltyCard({
               </p>
             </div>
             <span className="rounded-full bg-white/10 px-3 py-2 text-xs">
-              Cliente frecuente
+              Cova Puntos
             </span>
           </div>
           <p className="mt-8 text-xl font-semibold">
             {card?.display_name ?? "Tu próxima recompensa empieza aquí"}
           </p>
           <p className="mt-2 text-sm text-blue-100">
-            Un sello por cada ₡10.000 en compras
+            1 punto por cada ₡1.000 en compras
           </p>
-          <div
-            aria-label={`${filled} de 6 espacios completados`}
-            className="my-8 grid grid-cols-3 gap-3 sm:grid-cols-6"
-          >
-            {Array.from({ length: 6 }, (_, i) => (
+          <div className="my-8">
+            <p className="text-5xl font-bold tracking-tight">
+              {filled}
+              <span className="text-lg font-normal text-blue-200">
+                {" "}
+                / {POINTS_TARGET} puntos
+              </span>
+            </p>
+            <div
+              role="progressbar"
+              aria-label="Cova Puntos hacia tu próximo cupón"
+              aria-valuemin={0}
+              aria-valuemax={POINTS_TARGET}
+              aria-valuenow={filled}
+              className="mt-4 h-4 overflow-hidden rounded-full bg-white/10"
+            >
               <div
-                key={i}
-                aria-label={`Sello ${i + 1}: ${i < filled ? "completado" : "pendiente"}`}
-                className={`flex aspect-square items-center justify-center rounded-2xl border ${i < filled ? "border-green-400 bg-green-500 text-white" : "border-white/25 bg-white/5 text-blue-200"}`}
-              >
-                {i < filled ? (
-                  <Check size={28} aria-hidden="true" />
-                ) : (
-                  <span className="text-xl">{i + 1}</span>
-                )}
-              </div>
-            ))}
+                className="h-full rounded-full bg-green-500 transition-[width]"
+                style={{ width: `${(filled / POINTS_TARGET) * 100}%` }}
+              />
+            </div>
           </div>
           <div className="flex items-center justify-between gap-4 border-t border-white/20 pt-5">
             <div>
@@ -105,7 +110,7 @@ export function LoyaltyCard({
         </div>
         {demo && (
           <div className="mt-5 rounded-2xl bg-amber-50 p-5 text-sm text-amber-900">
-            <p className="font-bold">Prueba cómo se completa la tarjeta</p>
+            <p className="font-bold">Prueba cómo se acumulan tus Cova Puntos</p>
             <p className="mt-2">
               Esta simulación se reinicia al salir; no genera cupones reales.
             </p>
@@ -143,21 +148,21 @@ export function LoyaltyCard({
         )}
       </div>
       <div className="py-2">
-        <span className="eyebrow">Club Farmacova</span>
+        <span className="eyebrow">Cova Puntos</span>
         <h2 className="mt-3 text-3xl font-bold leading-tight text-blue-950">
           Tus compras te acercan
           <br />a tu próximo beneficio.
         </h2>
         <p className="mt-5 leading-relaxed text-slate-600">
-          Completa los seis sellos y recibe un cupón del 15% de descuento para
-          una compra posterior en la farmacia. El equipo de sucursal registra
-          tus compras y valida el canje.
+          Junta 60 Cova Puntos y recibe un cupón del 15% de descuento para una
+          compra posterior en la farmacia. El equipo de sucursal registra tus
+          compras y valida el canje.
         </p>
         <p className="mt-3 text-sm text-slate-500">
           {accumulate
-            ? "Las compras pequeñas se acumulan: dos compras de ₡5.000 completan un sello."
-            : "Cada compra genera un sello por cada ₡10.000 completos; el resto no se acumula."}{" "}
-          Los sellos adicionales comienzan tu próxima tarjeta.
+            ? "Los montos pequeños se acumulan: dos compras de ₡500 suman un punto."
+            : "Cada compra suma un punto por cada ₡1.000 completos; el resto no se acumula."}{" "}
+          Los puntos que sobran cuentan para tu próximo cupón.
         </p>
         {!enabled && (
           <p
@@ -177,17 +182,18 @@ export function LoyaltyCard({
               <p className="font-bold text-green-900">
                 {available > 0
                   ? `${available} ${available === 1 ? "cupón disponible" : "cupones disponibles"} del 15%`
-                  : `${filled} de 6 sellos completados`}
+                  : `${filled} de ${POINTS_TARGET} Cova Puntos`}
               </p>
               {accumulate && card.remainder_cents > 0 && (
                 <p className="mt-2 text-sm text-green-800">
-                  Acumulado hacia tu siguiente sello:{" "}
+                  Acumulado hacia tu siguiente punto:{" "}
                   {crc(card.remainder_cents / 100)}
                 </p>
               )}
               {!card.active && (
                 <p className="mt-2 text-red-800">
-                  Tu tarjeta está suspendida. Contacta con la sucursal.
+                  Tu cuenta Cova Puntos está suspendida. Contacta con la
+                  sucursal.
                 </p>
               )}
             </div>
@@ -195,14 +201,14 @@ export function LoyaltyCard({
               <div className="mt-5 flex items-center gap-5">
                 <Image
                   src={qr}
-                  alt="Código QR de tu tarjeta de fidelidad"
+                  alt="Código QR de tu cuenta Cova Puntos"
                   width={120}
                   height={120}
                   unoptimized
                 />
                 <p className="max-w-48 text-sm text-slate-500">
-                  Muestra este código en sucursal para identificar tu tarjeta.
-                  El descuento lo valida un administrador.
+                  Muestra este código en sucursal para sumar tus puntos. El
+                  descuento lo valida un administrador.
                 </p>
               </div>
             )}
@@ -217,12 +223,12 @@ export function LoyaltyCard({
               >
                 {card.active
                   ? "Apple Wallet · Próximamente"
-                  : "Tarjeta suspendida"}
+                  : "Cuenta suspendida"}
               </button>
             )}
             <p className="mt-3 text-xs leading-relaxed text-slate-500">
               {walletReady
-                ? "Después de una compra o canje, descarga nuevamente la tarjeta para actualizar los sellos en Wallet. En esta página siempre verás tu saldo actual."
+                ? "Después de una compra o canje, descarga nuevamente la tarjeta para actualizar tus puntos en Wallet. En esta página siempre verás tu saldo actual."
                 : "La descarga estará disponible cuando Farmacova active sus certificados de Apple Wallet."}
             </p>
           </>
@@ -239,7 +245,7 @@ export function LoyaltyCard({
             }}
           >
             <label className="field-label" htmlFor="member-name">
-              Nombre en tu tarjeta
+              Nombre en tu cuenta Cova Puntos
             </label>
             <input
               id="member-name"
@@ -259,11 +265,11 @@ export function LoyaltyCard({
                 onChange={(e) => setAccepted(e.target.checked)}
                 required
               />
-              Acepto las condiciones del Club Farmacova que se muestran en esta
+              Acepto las condiciones de Cova Puntos que se muestran en esta
               página.
             </label>
             <button className="btn-primary mt-5" disabled={pending || !enabled}>
-              {pending ? "Creando tarjeta…" : "Crear mi tarjeta gratuita"}
+              {pending ? "Creando tu cuenta…" : "Unirme gratis a Cova Puntos"}
             </button>
             {error && (
               <p role="alert" className="field-error">
@@ -277,9 +283,10 @@ export function LoyaltyCard({
             Condiciones del programa
           </summary>
           <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-600">
-            6 sellos de ₡10.000 otorgan un cupón de 15% para una compra
-            posterior. Cada cupón se usa una sola vez, en sucursal. Un cupón por
-            factura. Sin caducidad automática.{terms ? `\n\n${terms}` : ""}
+            1 punto por cada ₡1.000 en compras. 60 puntos otorgan un cupón de
+            15% para una compra posterior. Cada cupón se usa una sola vez, en
+            sucursal. Un cupón por factura. Sin caducidad automática.
+            {terms ? `\n\n${terms}` : ""}
           </p>
         </details>
       </div>

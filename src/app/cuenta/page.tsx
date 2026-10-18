@@ -49,7 +49,7 @@ export default async function AccountPage() {
         )}
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/fidelidad" className="btn-primary">
-            Mi tarjeta de fidelidad
+            Mis Cova Puntos
           </Link>
           <Link href="/catalogo" className="btn-primary">
             Explorar catálogo

@@ -61,7 +61,7 @@ export function Navbar() {
             className="flex flex-col items-center gap-1 text-white hover:text-green-300"
           >
             <CreditCard size={25} strokeWidth={1.6} aria-hidden="true" />
-            <span className="text-xs">Mi tarjeta</span>
+            <span className="text-xs">Mis puntos</span>
           </Link>
         </div>
       </div>
@@ -94,14 +94,14 @@ export function Navbar() {
           href="/fidelidad"
           className="px-4 py-4 font-medium hover:bg-white/10"
         >
-          Club Farmacova
+          Cova Puntos
         </Link>
       </nav>
       <Link
         href="/fidelidad"
         className="block bg-green-600 px-5 py-3 text-center text-sm font-semibold hover:bg-green-700"
       >
-        Tus compras tienen recompensa: completa 6 sellos y recibe un 15% de
+        Tus compras tienen recompensa: junta 60 Cova Puntos y recibe un 15% de
         descuento
       </Link>
     </header>

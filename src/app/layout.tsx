@@ -6,7 +6,7 @@ import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const description =
-  "Descubre las promociones del mes de Farmacova en Costa Rica. Información de productos, aplicación de vacunas e inyectables y Club Farmacova.";
+  "Descubre las promociones del mes de Farmacova en Costa Rica. Información de productos, aplicación de vacunas e inyectables y Cova Puntos.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),

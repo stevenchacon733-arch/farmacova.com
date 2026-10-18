@@ -11,7 +11,7 @@ function message(error: { message: string; code?: string }) {
   if (error.message.includes("USE_NEW_PURCHASE"))
     return "El descuento se usa en una compra posterior, con una factura nueva.";
   if (error.message.includes("MEMBER_INACTIVE"))
-    return "Esta tarjeta está suspendida o no existe.";
+    return "Esta cuenta Cova Puntos está suspendida o no existe.";
   if (error.message.includes("PROGRAM_PAUSED"))
     return "La acumulación está pausada desde Configuración.";
   if (error.message.includes("REQUEST_CONFLICT"))
@@ -106,8 +106,8 @@ export async function recordPurchase(
     revalidatePath("/fidelidad");
     return {
       message: data.duplicate
-        ? "Esta operación ya estaba registrada; no se duplicaron los sellos."
-        : `Compra registrada: ${data.stamps} sellos añadidos.`,
+        ? "Esta operación ya estaba registrada; no se duplicaron los puntos."
+        : `Compra registrada: ${data.stamps} Cova Puntos añadidos.`,
     };
   } catch (error) {
     return {

@@ -6,7 +6,8 @@ import {
   amountToCents,
   crc,
   demoMember,
-  visibleStamps,
+  POINTS_TARGET,
+  visiblePoints,
   type Member,
   type Reward,
   type Purchase,
@@ -90,7 +91,8 @@ export function CustomerManager({
             throw new Error(
               "La factura ya fue registrada. Usa una factura nueva.",
             );
-          if (!member.active) throw new Error("Esta tarjeta está suspendida.");
+          if (!member.active)
+            throw new Error("Esta cuenta Cova Puntos está suspendida.");
           const reward = available.find((row) => row.id === rewardId);
           if (mode === "redeem" && !reward)
             throw new Error("Selecciona un cupón disponible.");
@@ -130,7 +132,7 @@ export function CustomerManager({
             nextRewards.push({
               id: crypto.randomUUID(),
               member_id: sample.id,
-              cycle: Math.floor(sample.total_stamps / 6) + i + 1,
+              cycle: Math.floor(sample.total_stamps / POINTS_TARGET) + i + 1,
               created_at: new Date().toISOString(),
               redeemed_at: null,
               redemption_receipt: null,
@@ -149,8 +151,8 @@ export function CustomerManager({
           ]);
           setMessage(
             mode === "redeem"
-              ? `Canje simulado: ${crc(discount / 100)} de descuento. ${next.added} sellos añadidos.`
-              : `Compra simulada: ${next.added} sellos añadidos.`,
+              ? `Canje simulado: ${crc(discount / 100)} de descuento. ${next.added} Cova Puntos añadidos.`
+              : `Compra simulada: ${next.added} Cova Puntos añadidos.`,
           );
         } else {
           const result =
@@ -202,7 +204,7 @@ export function CustomerManager({
                 {row.member_number}
               </span>
               <span className="mt-2 block text-xs text-green-800">
-                {row.active ? "Tarjeta activa" : "Suspendida"}
+                {row.active ? "Cuenta activa" : "Suspendida"}
               </span>
             </button>
           ))}
@@ -216,25 +218,28 @@ export function CustomerManager({
           <div>
             <div className="rounded-3xl bg-blue-900 p-6 text-white">
               <p className="text-xl font-bold">{member.display_name}</p>
-              <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-6">
-                {Array.from({ length: 6 }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`rounded-xl p-4 text-center font-bold ${i < visibleStamps(member.total_stamps, available.length) ? "bg-green-500" : "bg-white/10"}`}
-                  >
-                    {i < visibleStamps(member.total_stamps, available.length)
-                      ? "✓"
-                      : i + 1}
-                  </div>
-                ))}
+              <p className="mt-5 text-3xl font-bold">
+                {visiblePoints(member.total_stamps, available.length)}
+                <span className="text-base font-normal text-blue-200">
+                  {" "}
+                  / {POINTS_TARGET} puntos
+                </span>
+              </p>
+              <div className="mt-3 h-3 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-green-500"
+                  style={{
+                    width: `${(visiblePoints(member.total_stamps, available.length) / POINTS_TARGET) * 100}%`,
+                  }}
+                />
               </div>
               <p className="mt-5 text-sm text-blue-100">
                 {available.length} cupones del 15% disponibles ·{" "}
-                {member.total_stamps} sellos históricos
+                {member.total_stamps} puntos históricos
               </p>
               {accumulate && (
                 <p className="mt-2 text-sm text-blue-100">
-                  Acumulado hacia el siguiente sello:{" "}
+                  Acumulado hacia el siguiente punto:{" "}
                   {crc(member.remainder_cents / 100)}
                 </p>
               )}
@@ -260,7 +265,7 @@ export function CustomerManager({
                 }}
               >
                 <option value="purchase">
-                  Registrar compra y completar sellos
+                  Registrar compra y sumar puntos
                 </option>
                 <option value="redeem" disabled={!available.length}>
                   Canjear un cupón del 15%
@@ -333,8 +338,8 @@ export function CustomerManager({
                 registrarse una vez.{" "}
                 {mode === "redeem"
                   ? earnOnRedemption
-                    ? "Se acumulan sellos sobre el importe después del descuento."
-                    : "Las compras de canje no acumulan sellos."
+                    ? "Se acumulan puntos sobre el importe después del descuento."
+                    : "Las compras de canje no acumulan puntos."
                   : "Las operaciones quedan en el historial."}
               </p>
               <button
@@ -370,7 +375,7 @@ export function CustomerManager({
                 {customerPurchases.map((row) => (
                   <p key={row.id} className="text-sm text-slate-600">
                     Factura {row.receipt} · {crc(row.amount_cents / 100)} ·{" "}
-                    {row.stamps_added} sellos
+                    {row.stamps_added} puntos
                   </p>
                 ))}
                 {customerRewards.map((row) => (
@@ -395,8 +400,8 @@ export function CustomerManager({
                 if (
                   !confirm(
                     member.active
-                      ? "¿Suspender esta tarjeta? No podrá acumular ni canjear hasta reactivarla."
-                      : "¿Reactivar esta tarjeta?",
+                      ? "¿Suspender esta cuenta? No podrá acumular ni canjear hasta reactivarla."
+                      : "¿Reactivar esta cuenta?",
                   )
                 )
                   return;
@@ -413,7 +418,7 @@ export function CustomerManager({
                 });
               }}
             >
-              {member.active ? "Suspender tarjeta" : "Reactivar tarjeta"}
+              {member.active ? "Suspender cuenta" : "Reactivar cuenta"}
             </button>
           </div>
         )}
