@@ -150,6 +150,25 @@ test("migraciones: sellos, canje único, reintentos y permisos reales de Postgre
       (await db.query("select * from public.admin_audit")).rows.length,
       0,
     );
+    // Pop-up: el cliente no puede cambiarlo; el administrador sí.
+    assert.equal(
+      (
+        await db.query(
+          "update public.sponsored_ads set headline='Hackeado' returning id",
+        )
+      ).rows.length,
+      0,
+    );
+    await session(admin, "admin");
+    await db.query(
+      "update public.sponsored_ads set headline='Nuevo titular' where id='fc000000-0000-4000-8000-000000000201'",
+    );
+    await assert.rejects(
+      db.query(
+        "update public.sponsored_ads set image_path='https://evil.example/x.png' where id='fc000000-0000-4000-8000-000000000201'",
+      ),
+      /sponsored_ads_image_path_valid/,
+    );
     await db.exec("reset role; set role anon");
     const locations = await db.query<{
       name: string;

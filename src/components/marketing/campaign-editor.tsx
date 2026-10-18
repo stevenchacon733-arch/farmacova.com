@@ -16,6 +16,7 @@ import {
   validateCampaign,
   type Campaign,
 } from "@/lib/campaigns";
+import { checkImageFile, imageDataUrl } from "@/lib/image-file";
 
 function subscribePreview(listener: () => void) {
   window.addEventListener("storage", listener);
@@ -56,14 +57,6 @@ function localDate(value: string) {
 }
 function fromLocalDate(value: string) {
   return value ? new Date(`${value}-06:00`).toISOString() : "";
-}
-async function imageData(file: File): Promise<string> {
-  return await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
 }
 
 export function CampaignEditor({
@@ -112,34 +105,9 @@ export function CampaignEditor({
     setError("");
     setUploading(true);
     try {
-      const maxSize = demo ? 2 * 1024 * 1024 : 5 * 1024 * 1024;
-      if (
-        !["image/png", "image/jpeg", "image/webp"].includes(file.type) ||
-        file.size > maxSize
-      )
-        throw new Error(
-          `Usa una imagen PNG, JPG o WebP de hasta ${demo ? 2 : 5} MB.`,
-        );
-      const bytes = new Uint8Array(await file.slice(0, 16).arrayBuffer());
-      const png =
-        bytes[0] === 137 &&
-        bytes[1] === 80 &&
-        bytes[2] === 78 &&
-        bytes[3] === 71;
-      const jpg = bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
-      const webp =
-        new TextDecoder().decode(bytes.slice(0, 4)) === "RIFF" &&
-        new TextDecoder().decode(bytes.slice(8, 12)) === "WEBP";
-      if (!(
-        (file.type === "image/png" && png) ||
-        (file.type === "image/jpeg" && jpg) ||
-        (file.type === "image/webp" && webp)
-      ))
-        throw new Error(
-          "El archivo no coincide con un formato de imagen admitido.",
-        );
+      const extension = await checkImageFile(file, demo ? 2 : 5);
       if (demo) {
-        change("image_path", await imageData(file));
+        change("image_path", await imageDataUrl(file));
       } else {
         const client = createClient();
         const {
@@ -150,12 +118,6 @@ export function CampaignEditor({
           throw new Error(
             "Tu sesión de administrador no está disponible. Ingresa otra vez.",
           );
-        const extension =
-          file.type === "image/png"
-            ? "png"
-            : file.type === "image/jpeg"
-              ? "jpg"
-              : "webp";
         const path = `${user.id}/${crypto.randomUUID()}.${extension}`;
         const { error: uploadError } = await client.storage
           .from("campaign-images")

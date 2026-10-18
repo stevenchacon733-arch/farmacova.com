@@ -1,16 +1,16 @@
 import { crc } from "@/lib/loyalty";
 import type { Product } from "@/lib/catalog";
+import { isActivePromotion } from "@/lib/promotions";
 export async function ProductPrice({ product }: { product: Product }) {
   // Componente exclusivo del servidor: las ofertas se evalúan por solicitud.
-  // eslint-disable-next-line react-hooks/purity
-  const now = Date.now();
+  // Misma regla que la insignia "Ahorra" de PromotionCard: si la promoción
+  // está desactivada, se muestra el precio regular.
   const onSale =
     product.sale_price_crc != null &&
     product.price_crc != null &&
-    product.promotion_starts_at &&
-    product.promotion_ends_at &&
-    Date.parse(product.promotion_starts_at) <= now &&
-    Date.parse(product.promotion_ends_at) > now;
+    product.sale_price_crc < product.price_crc &&
+    product.promotion_ends_at != null &&
+    isActivePromotion(product);
   return (
     <div className="mt-4">
       {product.price_crc != null ? (

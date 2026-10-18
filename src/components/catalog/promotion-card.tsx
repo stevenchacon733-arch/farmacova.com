@@ -24,7 +24,7 @@ export function PromotionCard({ product }: { product: Product }) {
             fill
             sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 440px"
             className="object-contain"
-            unoptimized
+            unoptimized={!image.startsWith("/images/")}
           />
         ) : (
           <div className="flex h-full items-center justify-center">

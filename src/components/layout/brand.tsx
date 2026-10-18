@@ -14,7 +14,7 @@ export function Brand() {
         width={222}
         height={112}
         className="h-auto w-36 sm:w-44"
-        unoptimized
+        preload
       />
     </Link>
   );
