@@ -148,7 +148,8 @@ export function CampaignCarousel({
             fill
             sizes="100vw"
             className="object-contain"
-            unoptimized
+            unoptimized={!slide.image_path.startsWith("/images/")}
+            preload={index === 0}
           />
         </Link>
       </div>
@@ -158,7 +159,7 @@ export function CampaignCarousel({
             type="button"
             onClick={() => move(-1)}
             aria-label="Anuncio anterior"
-            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/85 p-2.5 text-white hover:bg-blue-800 sm:left-4 sm:p-3"
+            className="absolute left-2 top-1/2 hidden sm:block -translate-y-1/2 rounded-full bg-blue-950/85 p-2.5 text-white hover:bg-blue-800 sm:left-4 sm:p-3"
           >
             <ChevronLeft size={24} aria-hidden="true" />
           </button>
@@ -166,7 +167,7 @@ export function CampaignCarousel({
             type="button"
             onClick={() => move(1)}
             aria-label="Siguiente anuncio"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/85 p-2.5 text-white hover:bg-blue-800 sm:right-4 sm:p-3"
+            className="absolute right-2 top-1/2 hidden sm:block -translate-y-1/2 rounded-full bg-blue-950/85 p-2.5 text-white hover:bg-blue-800 sm:right-4 sm:p-3"
           >
             <ChevronRight size={24} aria-hidden="true" />
           </button>

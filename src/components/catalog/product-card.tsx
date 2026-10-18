@@ -23,7 +23,9 @@ export function ProductCard({ product }: { product: Product }) {
             width={192}
             height={192}
             className="h-full w-full object-contain"
-            unoptimized
+            unoptimized={
+              !localImagePath(product.image_path)!.startsWith("/images/")
+            }
           />
         ) : (
           <div className="flex h-24 w-24 items-center justify-center rounded-3xl border border-white bg-white text-blue-800 shadow-sm transition group-hover:-translate-y-1">

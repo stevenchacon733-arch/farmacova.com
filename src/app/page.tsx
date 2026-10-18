@@ -7,6 +7,7 @@ import { PromotionCard } from "@/components/catalog/promotion-card";
 import { OffersRail } from "@/components/marketing/offers-rail";
 import { SponsoredModal } from "@/components/ads/sponsored-modal";
 import { Services } from "@/components/marketing/services";
+import { BrandsRail } from "@/components/marketing/brands-rail";
 
 export const dynamic = "force-dynamic";
 
@@ -107,6 +108,7 @@ export default async function HomePage() {
           </p>
         )}
       </section>
+      <BrandsRail />
       <div className="bg-green-100 py-4">
         <div className="shell flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <p className="flex items-center gap-4 font-medium text-blue-950">
@@ -148,7 +150,7 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-      <SponsoredModal ad={ad} />
+      <SponsoredModal ad={ad} demo={isDemoMode()} />
     </>
   );
 }

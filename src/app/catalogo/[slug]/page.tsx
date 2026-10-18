@@ -20,7 +20,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProduct(slug);
-  return { title: product?.name ?? "Producto" };
+  if (!product) return { title: "Producto" };
+  const image = localImagePath(product.image_path);
+  const description = product.description.slice(0, 160);
+  return {
+    title: product.name,
+    description,
+    alternates: { canonical: `/catalogo/${product.slug}` },
+    openGraph: {
+      title: `${product.name} | Farmacova`,
+      description,
+      ...(image ? { images: [{ url: image, alt: product.name }] } : {}),
+    },
+  };
 }
 
 export default async function ProductPage({
@@ -51,7 +63,10 @@ export default async function ProductPage({
               width={554}
               height={554}
               className="h-auto w-full rounded-3xl"
-              unoptimized
+              unoptimized={
+                !localImagePath(product.image_path)!.startsWith("/images/")
+              }
+              preload
             />
           ) : (
             <CategoryIcon

@@ -3,26 +3,31 @@
 import Link from "next/link";
 import { UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 
 export function AccountLink({ dark = false }: { dark?: boolean }) {
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
     if (!hasSupabaseConfig()) return;
-    const client = createClient();
     let active = true;
-    void client.auth.getUser().then(({ data }) => {
-      if (active) setSignedIn(Boolean(data.user?.email_confirmed_at));
+    let unsubscribe = () => {};
+    // Carga diferida: el cliente de Supabase (~70 KB) no bloquea la página.
+    void import("@/lib/supabase/client").then(({ createClient }) => {
+      if (!active) return;
+      const client = createClient();
+      void client.auth.getUser().then(({ data }) => {
+        if (active) setSignedIn(Boolean(data.user?.email_confirmed_at));
+      });
+      const {
+        data: { subscription },
+      } = client.auth.onAuthStateChange((_event, session) =>
+        setSignedIn(Boolean(session?.user.email_confirmed_at)),
+      );
+      unsubscribe = () => subscription.unsubscribe();
     });
-    const {
-      data: { subscription },
-    } = client.auth.onAuthStateChange((_event, session) =>
-      setSignedIn(Boolean(session?.user.email_confirmed_at)),
-    );
     return () => {
       active = false;
-      subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
   return (

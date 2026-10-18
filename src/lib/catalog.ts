@@ -4,6 +4,7 @@ import { getSupabaseConfig } from "./supabase/config";
 import { normalizeSearch } from "./validation";
 import { isActivePromotion } from "./promotions";
 import { monthlyProducts } from "./monthly-products";
+import { demoPopup, type PopupAd } from "./popup";
 
 export type Category = {
   slug: string;
@@ -29,13 +30,6 @@ export type Product = {
   promotion_starts_at?: string | null;
   promotion_ends_at?: string | null;
   availability?: string;
-};
-export type SponsoredAd = {
-  sponsor: string;
-  product: string;
-  headline: string;
-  description: string;
-  image_path: string | null;
 };
 export type Collection =
   "todos" | "mas-vendidos" | "destacados" | "promociones";
@@ -152,15 +146,6 @@ export const demoProducts: Product[] = [
     image_path: null,
   },
 ];
-
-export const defaultAd: SponsoredAd = {
-  sponsor: "Fast&Up",
-  product: "Fast&Up Vitamina C + D3 + Zinc",
-  headline: "Tabletas efervescentes sabor naranja",
-  description:
-    "Campaña de Fast&Up. Consulta condiciones y disponibilidad en sucursal.",
-  image_path: "/images/fast-up-vitamina-c-d3-zinc.jpeg",
-};
 
 export function isDemoMode() {
   return process.env.FARMACOVA_DEMO_MODE === "true";
@@ -282,19 +267,21 @@ export async function getProduct(slug: string): Promise<Product | null> {
   return data;
 }
 
-export async function getSponsoredAd(): Promise<SponsoredAd> {
-  if (isDemoMode()) return defaultAd;
+// Sin pop-up vigente no se muestra ninguno: el panel decide cuándo aparece.
+export async function getSponsoredAd(): Promise<PopupAd | null> {
+  if (isDemoMode()) return demoPopup;
   const { data, error } = await publicClient()
     .from("sponsored_ads")
-    .select("sponsor,product,headline,description,image_path")
+    .select(
+      "id,sponsor,product,headline,description,image_path,active,starts_at,ends_at",
+    )
     .eq("active", true)
     .lte("starts_at", new Date().toISOString())
     .gt("ends_at", new Date().toISOString())
     .order("starts_at", { ascending: false })
     .limit(1)
     .maybeSingle();
-  // Mantener el anuncio entregado por el usuario como campaña inicial.
-  return error || !data ? defaultAd : data;
+  return error || !data ? null : data;
 }
 
 export function filterProducts(products: Product[], query = "", category = "") {

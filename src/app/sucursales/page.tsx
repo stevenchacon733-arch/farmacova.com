@@ -21,7 +21,11 @@ import {
   type Branch,
 } from "@/lib/branches";
 
-export const metadata: Metadata = { title: "Nuestras sucursales" };
+export const metadata: Metadata = {
+  title: "Nuestras sucursales",
+  description:
+    "Ubicaciones, horarios y teléfonos de Farmacova en Aguas Zarcas, Ciudad Quesada, Venecia y Pital.",
+};
 export const dynamic = "force-dynamic";
 
 export default async function BranchesPage({
@@ -55,8 +59,29 @@ export default async function BranchesPage({
       : servicio === "inyectables"
         ? "Aplicación de inyectables"
         : null;
+  // Datos estructurados para que Google muestre cada sucursal como farmacia.
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": branches.map((branch) => ({
+      "@type": "Pharmacy",
+      name: branch.name,
+      telephone: `+506 ${branch.phone}`,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: branch.address,
+        addressCountry: "CR",
+      },
+      hasMap: mapsHref(branch),
+    })),
+  };
   return (
     <div className="shell py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
       <span className="eyebrow">Farmacova, cerca de ti</span>
       <h1 className="mt-3 text-4xl font-bold tracking-tight text-blue-950">
         Nuestras sucursales

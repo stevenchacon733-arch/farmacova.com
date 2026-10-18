@@ -5,6 +5,8 @@ import { demoCampaigns, type Campaign } from "@/lib/campaigns";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 import { CampaignEditor } from "@/components/marketing/campaign-editor";
+import { PopupEditor } from "@/components/marketing/popup-editor";
+import { demoPopup, type PopupAd } from "@/lib/popup";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -15,6 +17,7 @@ export const metadata = {
 export default async function CampaignAdminPage() {
   const demo = isDemoMode();
   let campaigns: Campaign[] = demoCampaigns;
+  let popups: PopupAd[] = [demoPopup];
   if (!demo) {
     if (!hasSupabaseConfig()) redirect("/auth");
     const client = await createClient();
@@ -46,6 +49,18 @@ export default async function CampaignAdminPage() {
       .order("position");
     if (readError) throw new Error("No pudimos cargar el panel de anuncios.");
     campaigns = data ?? [];
+    const { data: ads, error: adsError } = await client
+      .from("sponsored_ads")
+      .select(
+        "id,sponsor,product,headline,description,image_path,active,starts_at,ends_at",
+      )
+      .order("starts_at", { ascending: false })
+      .limit(20);
+    if (adsError)
+      throw new Error(
+        "Aplica la migración 202610180007_popup_admin.sql para editar el pop-up.",
+      );
+    popups = ads ?? [];
   }
   return (
     <div className="shell py-10">
@@ -63,6 +78,16 @@ export default async function CampaignAdminPage() {
         de aparición.
       </p>
       <CampaignEditor initialCampaigns={campaigns} demo={demo} />
+      <section id="pop-up" className="mt-14 border-t border-slate-200 pt-10">
+        <h2 className="text-3xl font-semibold tracking-tight text-blue-950">
+          Pop-up de la portada
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-500">
+          El anuncio que aparece a los 3 segundos en la portada, una vez por
+          visita. Cambia la imagen, el patrocinador y las fechas.
+        </p>
+        <PopupEditor initialAds={popups} demo={demo} />
+      </section>
     </div>
   );
 }
