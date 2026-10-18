@@ -6,7 +6,7 @@ import { PGlite } from "@electric-sql/pglite";
 
 // PostgreSQL embebido ejecuta las migraciones y RLS; auth/storage se sustituyen
 // solo en este entorno de prueba. No equivale a probar un proyecto Supabase vivo.
-test("migraciones: sellos, canje único, reintentos y permisos reales de PostgreSQL", async () => {
+test("migraciones: Cova Puntos, canje único, reintentos y permisos reales de PostgreSQL", async () => {
   const db = new PGlite();
   try {
     await db.exec(`create role anon; create role authenticated;
@@ -97,7 +97,7 @@ test("migraciones: sellos, canje único, reintentos y permisos reales de Postgre
       "select total_stamps,remainder_cents from public.loyalty_members where id=$1",
       [member],
     );
-    assert.equal(Number(card.rows[0].total_stamps), 6);
+    assert.equal(Number(card.rows[0].total_stamps), 60);
     assert.equal(Number(card.rows[0].remainder_cents), 0);
     const reward = (
       await db.query<{ id: string }>(
@@ -136,8 +136,8 @@ test("migraciones: sellos, canje único, reintentos y permisos reales de Postgre
       "select total_stamps,remainder_cents from public.loyalty_members where id=$1",
       [member],
     );
-    assert.equal(Number(after.rows[0].total_stamps), 7);
-    assert.equal(Number(after.rows[0].remainder_cents), 700000);
+    assert.equal(Number(after.rows[0].total_stamps), 77);
+    assert.equal(Number(after.rows[0].remainder_cents), 0);
     assert.ok(
       (await db.query("select * from public.admin_audit")).rows.length >= 9,
     );

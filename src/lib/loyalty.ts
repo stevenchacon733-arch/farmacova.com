@@ -1,6 +1,8 @@
 // Montos expresados en céntimos: evita errores al sumar dinero con decimales.
-export const STAMP_CENTS = 1_000_000;
-export const STAMP_TARGET = 6;
+// Cova Puntos: 1 punto por cada ₡1.000; 60 puntos dan un cupón del 15%.
+export const PROGRAM_NAME = "Cova Puntos";
+export const POINT_CENTS = 100_000;
+export const POINTS_TARGET = 60;
 export const REWARD_PERCENT = 15;
 export function amountToCents(value: string): number {
   const normalized = value.trim();
@@ -13,32 +15,33 @@ export function amountToCents(value: string): number {
   return cents;
 }
 export function accrue(
-  stamps: number,
+  points: number,
   remainder: number,
   cents: number,
   accumulate = true,
 ) {
   if (
-    ![stamps, remainder, cents].every(Number.isSafeInteger) ||
-    stamps < 0 ||
+    ![points, remainder, cents].every(Number.isSafeInteger) ||
+    points < 0 ||
     remainder < 0 ||
-    remainder >= STAMP_CENTS ||
+    remainder >= POINT_CENTS ||
     cents <= 0
   )
     throw new Error("Datos de compra inválidos.");
   const amount = cents + (accumulate ? remainder : 0);
-  const added = Math.floor(amount / STAMP_CENTS);
-  const total = stamps + added;
+  const added = Math.floor(amount / POINT_CENTS);
+  const total = points + added;
   return {
     added,
     total,
-    remainder: accumulate ? amount % STAMP_CENTS : 0,
+    remainder: accumulate ? amount % POINT_CENTS : 0,
     rewards:
-      Math.floor(total / STAMP_TARGET) - Math.floor(stamps / STAMP_TARGET),
+      Math.floor(total / POINTS_TARGET) - Math.floor(points / POINTS_TARGET),
   };
 }
-export function visibleStamps(total: number, available: number) {
-  return total % STAMP_TARGET || (available > 0 ? STAMP_TARGET : 0);
+// Puntos del ciclo en curso; un ciclo completo se muestra lleno mientras haya cupón.
+export function visiblePoints(total: number, available: number) {
+  return total % POINTS_TARGET || (available > 0 ? POINTS_TARGET : 0);
 }
 export function crc(amount: number) {
   return new Intl.NumberFormat("es-CR", {
@@ -77,7 +80,7 @@ export const demoMember: Member = {
   id: "11111111-1111-4111-8111-111111111111",
   user_id: "",
   member_number: "FC-DEMO-001",
-  display_name: "Tu tarjeta Farmacova",
+  display_name: "Tu cuenta Cova Puntos",
   total_stamps: 0,
   remainder_cents: 0,
   active: true,

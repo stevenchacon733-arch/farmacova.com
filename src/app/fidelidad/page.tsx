@@ -10,7 +10,7 @@ import type { Member, Reward } from "@/lib/loyalty";
 import { getRewards } from "@/lib/loyalty-server";
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Club Farmacova · Tarjeta de fidelidad",
+  title: "Cova Puntos · Cliente frecuente Farmacova",
   robots: { index: false, follow: false },
 };
 export default async function LoyaltyPage() {
@@ -20,7 +20,7 @@ export default async function LoyaltyPage() {
   if (!demo && !hasSupabaseConfig())
     return (
       <div className="shell py-12">
-        <h1 className="text-3xl font-bold text-blue-950">Club Farmacova</h1>
+        <h1 className="text-3xl font-bold text-blue-950">Cova Puntos</h1>
         <p className="mt-4">La inscripción estará disponible próximamente.</p>
       </div>
     );
@@ -29,7 +29,7 @@ export default async function LoyaltyPage() {
     if (!hasSupabaseConfig())
       return (
         <div className="shell py-12">
-          <h1 className="text-3xl font-bold text-blue-950">Club Farmacova</h1>
+          <h1 className="text-3xl font-bold text-blue-950">Cova Puntos</h1>
           <p className="mt-4">La inscripción estará disponible próximamente.</p>
         </div>
       );
@@ -40,19 +40,19 @@ export default async function LoyaltyPage() {
     if (!user?.email_confirmed_at)
       return (
         <div className="shell py-16 text-center">
-          <span className="eyebrow">Club Farmacova</span>
+          <span className="eyebrow">Cova Puntos</span>
           <h1 className="mt-4 text-4xl font-bold text-blue-950">
-            6 sellos te dan un 15% de descuento.
+            60 Cova Puntos te dan un 15% de descuento.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-slate-600">
-            Un sello por cada ₡10.000 en compras en la farmacia. Crea tu cuenta
-            y confirma tu correo para obtener tu tarjeta.
+            Un punto por cada ₡1.000 en compras en la farmacia. Crea tu cuenta y
+            confirma tu correo para empezar a sumar.
           </p>
           <Link
             href="/auth?mode=registro&next=/fidelidad"
             className="btn-primary mt-7"
           >
-            Crear cuenta y obtener tarjeta
+            Crear cuenta y unirme
           </Link>
           <Link
             href="/auth?next=/fidelidad"
@@ -68,7 +68,7 @@ export default async function LoyaltyPage() {
       .eq("user_id", user.id)
       .maybeSingle();
     if (error)
-      throw new Error("No pudimos cargar tu tarjeta. Intenta nuevamente.");
+      throw new Error("No pudimos cargar tus Cova Puntos. Intenta nuevamente.");
     member = data;
     if (member) {
       rewards = await getRewards(client, [member.id]);
@@ -83,7 +83,7 @@ export default async function LoyaltyPage() {
     : null;
   return (
     <section className="shell py-12">
-      <h1 className="sr-only">Tu tarjeta de fidelidad Farmacova</h1>
+      <h1 className="sr-only">Tus Cova Puntos Farmacova</h1>
       <LoyaltyCard
         member={member}
         rewards={rewards}

@@ -35,7 +35,7 @@ export default async function AdminPage() {
         {[
           "Productos",
           "Campañas",
-          "Tarjetas de fidelidad",
+          "Clientes Cova Puntos",
           "Cupones emitidos",
         ].map((label, i) => (
           <div key={label} className="rounded-2xl border border-slate-200 p-6">
@@ -46,11 +46,13 @@ export default async function AdminPage() {
       </div>
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <div className="rounded-3xl bg-blue-900 p-8 text-white">
-          <span className="text-sm text-blue-200">Club Farmacova</span>
-          <h2 className="mt-3 text-3xl font-bold">6 sellos. Un 15% para ti.</h2>
+          <span className="text-sm text-blue-200">Cova Puntos</span>
+          <h2 className="mt-3 text-3xl font-bold">
+            60 puntos. Un 15% para ti.
+          </h2>
           <p className="mt-4 text-blue-100">
-            Cada ₡10.000 en compras completa un sello. Registra las facturas y
-            canjea el beneficio en la siguiente compra.
+            Cada ₡1.000 en compras suma un punto. Registra las facturas y canjea
+            el beneficio en la siguiente compra.
           </p>
           <Link href="/administracion/clientes" className="btn-secondary mt-6">
             Gestionar clientes
@@ -64,7 +66,7 @@ export default async function AdminPage() {
               : "Pendiente de los certificados de Apple Developer para emitir tarjetas firmadas."}
           </p>
           <Link href="/fidelidad" className="btn-secondary mt-6">
-            Ver tarjeta
+            Ver Cova Puntos
           </Link>
         </div>
       </div>

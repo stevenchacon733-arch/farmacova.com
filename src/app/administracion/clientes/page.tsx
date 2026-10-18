@@ -60,12 +60,12 @@ export default async function CustomersPage({
     <>
       <h1 className="text-3xl font-bold text-blue-950">Clientes y cupones</h1>
       <p className="mt-3 text-sm text-slate-500">
-        Busca por nombre o pega el código de la tarjeta. Cada ₡10.000 equivale a
-        un sello; seis sellos generan un cupón de 15%.
+        Busca por nombre o pega el código del cliente. Cada ₡1.000 equivale a un
+        Cova Punto; 60 puntos generan un cupón de 15%.
       </p>
       <form className="mt-6 flex flex-wrap gap-3">
         <label className="sr-only" htmlFor="customer-query">
-          Buscar cliente por nombre o tarjeta
+          Buscar cliente por nombre o código
         </label>
         <input
           className="field max-w-lg"

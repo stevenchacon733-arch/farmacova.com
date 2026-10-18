@@ -40,7 +40,7 @@ const names: Record<string, string> = {
   hours: "Horario",
   loyalty_enabled: "Habilitar inscripciones y acumulación",
   accumulate_remainder: "Acumular compras pequeñas entre facturas",
-  earn_on_redemption: "Acumular sellos sobre el importe pagado al canjear",
+  earn_on_redemption: "Acumular puntos sobre el importe pagado al canjear",
   loyalty_terms: "Condiciones adicionales del programa",
 };
 const fields: Record<Entity, string[]> = {
@@ -290,11 +290,11 @@ export function RecordEditor({
               ? "Productos, precios y promociones"
               : entity === "sucursales"
                 ? "Tus sucursales"
-                : "Configuración del Club"}
+                : "Configuración de Cova Puntos"}
           </h1>
           <p className="mt-3 text-sm text-slate-500">
             {config
-              ? "6 espacios · ₡10.000 por sello · 15% al completar. Estos valores mantienen el programa que definiste."
+              ? "Cova Puntos · 1 punto por cada ₡1.000 · 60 puntos = 15% de descuento."
               : "Los borradores quedan ocultos. Despublica un registro para retirarlo del sitio."}
           </p>
         </div>
