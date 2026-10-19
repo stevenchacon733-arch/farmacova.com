@@ -59,4 +59,20 @@ export const brands: Brand[] = [
     height: 79,
     shape: "wide",
   },
+  {
+    slug: "sanofi",
+    name: "Sanofi",
+    logo: "/images/marcas/sanofi.webp",
+    width: 320,
+    height: 255,
+    shape: "tall",
+  },
+  {
+    slug: "raven",
+    name: "Raven Productos Farmacéuticos",
+    logo: "/images/marcas/raven.webp",
+    width: 320,
+    height: 96,
+    shape: "wide",
+  },
 ];

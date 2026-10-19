@@ -293,8 +293,28 @@ html:has(.product-drawer[open]) {
   background: linear-gradient(110deg, #f0f7fd 0%, #ddebf7 55%, #f3f9dc 100%);
   touch-action: pan-y;
 }
-.hero-slide {
-  animation: hero-enter 230ms ease-out;
+/* Diapositivas apiladas: la activa se funde y se acerca levemente. */
+.hero-slide-layer {
+  transition:
+    opacity 900ms ease,
+    transform 6s ease-out;
+  opacity: 0;
+  transform: scale(1.025);
+}
+.hero-slide-layer[data-active="true"] {
+  opacity: 1;
+  transform: scale(1);
+}
+.hero-dot-fill {
+  animation: hero-progress var(--hero-interval, 6s) linear forwards;
+}
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 .offers-rail {
   scrollbar-width: thin;
@@ -348,13 +368,13 @@ html:has(.product-drawer[open]) {
 }
 @keyframes brands-scroll {
   to {
-    transform: translateX(calc(-50% - 0.5rem));
+    transform: translateX(calc(-50% - 0.75rem));
   }
 }
 @media (min-width: 640px) {
   @keyframes brands-scroll {
     to {
-      transform: translateX(calc(-50% - 1rem));
+      transform: translateX(calc(-50% - 1.25rem));
     }
   }
 }
@@ -365,16 +385,6 @@ html:has(.product-drawer[open]) {
   }
   100% {
     transform: translateX(130%);
-  }
-}
-@keyframes hero-enter {
-  from {
-    opacity: 0.4;
-    transform: translateX(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -390,19 +400,20 @@ html:has(.product-drawer[open]) {
   .sponsor-dialog *,
   .sponsor-dialog,
   .sponsor-dialog::backdrop,
-  .brand-shine::after,
-  .brands-track {
+  .brand-shine::after {
     animation: none !important;
   }
-  .brands-viewport {
-    mask-image: none;
-  }
+  /* El dueño pidió que las marcas y el carrusel principal estén siempre en
+     movimiento. Con "reducir movimiento" se mantienen, pero más suaves: las
+     marcas avanzan más lento y las diapositivas solo se funden, sin zoom. */
   .brands-track {
-    width: auto;
-    flex-wrap: wrap;
-    justify-content: center;
+    animation-duration: 40s !important;
   }
-  .brands-track > [aria-hidden="true"] {
-    display: none;
+  .hero-dot-fill {
+    animation-duration: var(--hero-interval, 6s) !important;
+  }
+  .hero-slide-layer {
+    transition-duration: 900ms !important;
+    transform: none !important;
   }
 }
