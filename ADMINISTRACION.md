@@ -4,7 +4,7 @@
 
 1. Aplicar las siete migraciones, en orden, de `supabase/migrations/`. La quinta carga las cinco ubicaciones y la selección de octubre. La sexta, `202610030006_fast_up_popup.sql`, sustituye el pop-up de Tioflex por Fast&Up y desactiva duplicados vigentes de Tioflex en el carrusel. Si ya aplicaste las primeras cinco, ejecuta únicamente la sexta. La séptima, `202610180007_popup_admin.sql`, permite editar el pop-up desde el panel; si ya aplicaste las seis anteriores, ejecuta solo esta.
 2. Configurar Supabase en Vercel y poner `FARMACOVA_DEMO_MODE=false`. El modo demo abre el panel sin credenciales únicamente para revisar su aspecto y simular operaciones; no ejecuta escrituras reales.
-3. Crear y confirmar por correo la cuenta del administrador. Asignar `app_metadata.role = admin` desde una operación de administración de Supabase; nunca conceder permisos con `user_metadata`. Cerrar sesión y volver a ingresar. El usuario ve **Administrar farmacia** en `/cuenta`.
+3. Crear y confirmar por correo la cuenta del administrador. Asignar `app_metadata.role = admin` desde una operación de administración de Supabase; nunca conceder permisos con `user_metadata`. Cerrar sesión y volver a ingresar, y activar la verificación en dos pasos en `/cuenta/seguridad` (obligatoria para administrar; ver [SEGURIDAD.md](SEGURIDAD.md)). El usuario ve **Administrar farmacia** en `/cuenta`.
 4. Revisar el aviso de privacidad, condiciones, productos, precios e información real de las sucursales antes de abrir al público.
 
 ## Secciones

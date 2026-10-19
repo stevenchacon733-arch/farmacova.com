@@ -33,10 +33,10 @@ test("migraciones: sellos, canje único, reintentos y permisos reales de Postgre
         "insert into auth.users(id,email_confirmed_at) values($1,now())",
         [id],
       );
-    async function session(id: string, role = "customer") {
+    async function session(id: string, role = "customer", aal = "aal2") {
       await db.exec("reset role");
       await db.query("select set_config('request.jwt.claims',$1,false)", [
-        JSON.stringify({ sub: id, app_metadata: { role } }),
+        JSON.stringify({ sub: id, aal, app_metadata: { role } }),
       ]);
       await db.exec("set role authenticated");
     }
@@ -63,6 +63,15 @@ test("migraciones: sellos, canje único, reintentos y permisos reales de Postgre
     assert.equal(
       (await db.query("select * from public.loyalty_members")).rows.length,
       0,
+    );
+    // Sin verificación en dos pasos, el rol de administrador no sirve.
+    await session(admin, "admin", "aal1");
+    await assert.rejects(
+      db.query("select public.credit_loyalty_purchase($1,500000,'F-0',$2)", [
+        member,
+        randomUUID(),
+      ]),
+      /ADMIN_REQUIRED/,
     );
     await session(admin, "admin");
     const request = randomUUID();

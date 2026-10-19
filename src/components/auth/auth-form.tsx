@@ -34,6 +34,10 @@ function friendlyAuthError(code?: string): string {
     same_password: "Elige una contraseña diferente de la anterior.",
     session_not_found:
       "Tu sesión expiró. Solicita un nuevo enlace de recuperación.",
+    reauthentication_needed:
+      "Por seguridad, cierra sesión y vuelve a ingresar (o usa Recuperar contraseña) antes de cambiarla.",
+    insufficient_aal:
+      "Por seguridad, verifica primero el código de tu app de autenticación.",
   };
   return (
     messages[code ?? ""] ??
@@ -186,7 +190,14 @@ export function AuthForm({
             setError("Confirma tu correo antes de ingresar.");
             return;
           }
-          router.replace(safeNext(next));
+          // Con verificación en dos pasos, falta el código de la app.
+          const { data: aal } =
+            await client.auth.mfa.getAuthenticatorAssuranceLevel();
+          router.replace(
+            aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2"
+              ? `/auth/verificacion?next=${encodeURIComponent(safeNext(next))}`
+              : safeNext(next),
+          );
           router.refresh();
         }
       }

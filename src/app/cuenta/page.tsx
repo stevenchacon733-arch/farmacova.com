@@ -1,20 +1,12 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ShieldCheck } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
-import { hasSupabaseConfig } from "@/lib/supabase/config";
+import { requireVerifiedUser } from "@/lib/auth-server";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
-  if (!hasSupabaseConfig()) redirect("/auth");
-  const client = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await client.auth.getUser();
-  if (error || !user?.email_confirmed_at) redirect("/auth");
+  const { client, user } = await requireVerifiedUser("/cuenta");
   const { data: profile, error: profileError } = await client
     .from("profiles")
     .select("created_at")
@@ -56,6 +48,9 @@ export default async function AccountPage() {
           </Link>
           <Link href="/promociones" className="btn-secondary">
             Ver promociones
+          </Link>
+          <Link href="/cuenta/seguridad" className="btn-secondary">
+            Seguridad de la cuenta
           </Link>
           {user.app_metadata.role === "admin" && (
             <Link href="/administracion" className="btn-secondary">

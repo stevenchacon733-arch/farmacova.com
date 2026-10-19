@@ -3,19 +3,17 @@ import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isDemoMode } from "@/lib/catalog";
-import { hasSupabaseConfig } from "@/lib/supabase/config";
+import { requireVerifiedUser } from "@/lib/auth-server";
 
 export const requireAdmin = cache(async () => {
   if (isDemoMode()) return null;
-  if (!hasSupabaseConfig()) redirect("/auth?next=/administracion");
-  const client = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await client.auth.getUser();
-  if (error || !user?.email_confirmed_at)
-    redirect("/auth?next=/administracion");
+  const { client, user, aal } = await requireVerifiedUser(
+    "/administracion",
+    "/auth?next=/administracion",
+  );
   if (user.app_metadata?.role !== "admin") redirect("/cuenta");
+  // La base de datos exige lo mismo (is_farmacova_admin pide aal2).
+  if (aal !== "aal2") redirect("/cuenta/seguridad?requerido=admin");
   return client;
 });
 export type StoreSettings = {

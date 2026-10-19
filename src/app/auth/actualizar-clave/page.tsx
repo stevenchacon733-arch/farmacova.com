@@ -1,14 +1,15 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { hasSupabaseConfig } from "@/lib/supabase/config";
+import { requireVerifiedUser } from "@/lib/auth-server";
 import { AuthForm } from "@/components/auth/auth-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function UpdatePasswordPage() {
-  if (!hasSupabaseConfig()) redirect("/auth?mode=recuperar");
-  const { data, error } = await (await createClient()).auth.getUser();
-  if (error || !data.user) redirect("/auth?error=enlace&mode=recuperar");
+  // Con verificación en dos pasos activa, Supabase exige el código antes de
+  // cambiar la contraseña, también al llegar desde el correo de recuperación.
+  await requireVerifiedUser(
+    "/auth/actualizar-clave",
+    "/auth?error=enlace&mode=recuperar",
+  );
   return (
     <div className="shell py-12">
       <div className="mx-auto max-w-md">
