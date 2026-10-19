@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { searchProducts, pageSize, isDemoMode } from "@/lib/catalog";
-import { PromotionCard } from "@/components/catalog/promotion-card";
+import { searchProducts, pageSize } from "@/lib/catalog";
+import { ProductCard } from "@/components/catalog/product-card";
 
 export const metadata: Metadata = { title: "Promociones del mes" };
 export const dynamic = "force-dynamic";
@@ -51,16 +51,10 @@ export default async function PromotionsPage({
           </Link>
         </div>
       )}
-      {isDemoMode() && (
-        <p className="mt-6 text-xs text-slate-500">
-          Vista de ejemplo. Los productos y precios del mes se publican desde el
-          panel de administración.
-        </p>
-      )}
       {products.length ? (
-        <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
           {products.map((product) => (
-            <PromotionCard key={product.slug} product={product} />
+            <ProductCard key={product.slug} product={product} />
           ))}
         </div>
       ) : (

@@ -62,7 +62,15 @@ export function SponsoredModal({
     } catch {
       // Sin almacenamiento disponible, se muestra igual.
     }
-    const timer = window.setTimeout(() => setIsOpen(true), 3000);
+    // Si el visitante está viendo la ficha de un producto, espera a que la
+    // cierre: no se apila un diálogo encima de otro.
+    let timer = 0;
+    const open = () => {
+      if (document.querySelector("dialog[open]"))
+        timer = window.setTimeout(open, 1000);
+      else setIsOpen(true);
+    };
+    timer = window.setTimeout(open, 3000);
     return () => window.clearTimeout(timer);
   }, [adSignature]);
   const close = () => {
