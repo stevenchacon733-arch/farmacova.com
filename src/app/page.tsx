@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BadgePercent, MapPin, CreditCard } from "lucide-react";
+import { ArrowRight, MapPin, CreditCard } from "lucide-react";
 import { searchProducts, getSponsoredAd, isDemoMode } from "@/lib/catalog";
 import { getCampaigns } from "@/lib/campaigns-server";
 import { CampaignCarousel } from "@/components/marketing/campaign-carousel";
@@ -48,7 +48,7 @@ export default async function HomePage() {
       <CampaignCarousel campaigns={campaigns} demo={isDemoMode()} />
       <section
         id="promociones-del-mes"
-        className="shell py-10 sm:py-12"
+        className="shell scroll-mt-[max(1rem,env(safe-area-inset-top))] pb-10 pt-[max(2.5rem,env(safe-area-inset-top))] sm:py-12"
         aria-labelledby="promotions-title"
       >
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -78,25 +78,7 @@ export default async function HomePage() {
           </p>
         )}
         {promotions.products.length ? (
-          <OffersRail count={promotions.products.length + 1}>
-            <article className="flex min-h-[470px] flex-col justify-between rounded-sm bg-green-700 p-6 text-white sm:p-8">
-              <BadgePercent size={38} strokeWidth={1.5} aria-hidden="true" />
-              <div className="py-10">
-                <h3 className="max-w-sm text-3xl font-bold leading-tight">
-                  Descubre las ofertas que tenemos para ti.
-                </h3>
-                <p className="mt-4 max-w-sm text-sm leading-relaxed text-green-50">
-                  Una nueva selección cada mes. Conoce las condiciones de cada
-                  producto en tu sucursal Farmacova.
-                </p>
-              </div>
-              <Link
-                href="/promociones"
-                className="block rounded-sm bg-white px-5 py-3 text-center font-semibold text-blue-950 hover:bg-green-50"
-              >
-                Ver todas las ofertas
-              </Link>
-            </article>
+          <OffersRail count={promotions.products.length}>
             {promotions.products.map((product) => (
               <PromotionCard key={product.slug} product={product} />
             ))}

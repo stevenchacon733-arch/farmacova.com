@@ -16,7 +16,7 @@ export function PromotionCard({ product }: { product: Product }) {
       : 0;
   return (
     <article className="flex flex-col overflow-hidden rounded-sm border border-slate-200 bg-white">
-      <div className="relative h-[300px] shrink-0 bg-blue-50 sm:h-[340px] lg:h-[360px]">
+      <div className="relative h-[240px] shrink-0 bg-blue-50 sm:h-[340px] lg:h-[360px]">
         {image ? (
           <Image
             src={image}
@@ -37,9 +37,9 @@ export function PromotionCard({ product }: { product: Product }) {
           </div>
         )}
         {saving > 0 && (
-          <div className="absolute right-4 top-4 flex h-24 w-24 flex-col items-center justify-center rounded-full bg-green-600 text-white">
+          <div className="absolute right-3 top-3 flex h-20 w-20 flex-col sm:right-4 sm:top-4 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-green-600 text-white">
             <span className="text-xs font-semibold">Ahorra</span>
-            <span className="text-3xl font-bold">{saving}%</span>
+            <span className="text-2xl font-bold sm:text-3xl">{saving}%</span>
           </div>
         )}
       </div>
@@ -47,7 +47,7 @@ export function PromotionCard({ product }: { product: Product }) {
         <span className="text-xs font-bold uppercase tracking-wide text-green-700">
           {product.brand}
         </span>
-        <h3 className="mt-2 text-xl font-bold leading-tight text-blue-950">
+        <h3 className="mt-2 text-lg font-bold leading-snug text-blue-950 sm:text-xl sm:leading-tight">
           {product.name}
           {product.promotion_label ? ` · ${product.promotion_label}` : ""}
         </h3>

@@ -9,6 +9,8 @@
 }
 html {
   scroll-behavior: smooth;
+  /* Al saltar a una sección, deja espacio para la barra de estado del móvil. */
+  scroll-padding-top: max(1rem, env(safe-area-inset-top));
 }
 body {
   background: #fff;
