@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // next/image entrega AVIF o WebP según el navegador, con carga diferida.
+  images: { formats: ["image/avif", "image/webp"] },
   // Opción para verificar en entornos que restringen procesos secundarios.
   ...(process.env.FARMACOVA_RESTRICTED_BUILD === "true"
     ? {

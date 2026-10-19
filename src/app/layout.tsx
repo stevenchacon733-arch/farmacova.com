@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { WhatsAppContacts } from "@/components/layout/whatsapp-contacts";
+import { Analytics } from "@/components/layout/analytics";
 import { isDemoMode } from "@/lib/catalog";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: { default: "Farmacova | Cuidamos de ti", template: "%s | Farmacova" },
   description,
+  applicationName: "Farmacova",
   // El modo de ejemplo muestra fichas ficticias: no deben indexarse.
   robots: isDemoMode()
     ? { index: false, follow: false }
@@ -22,16 +25,13 @@ export const metadata: Metadata = {
     siteName: "Farmacova",
     title: "Farmacova | Cuidamos de ti",
     description,
-    images: [
-      {
-        url: "/images/farmacova-logo-transparente.png",
-        width: 444,
-        height: 224,
-        alt: "Farmacova · Cuidamos de ti",
-      },
-    ],
   },
+  // La imagen para redes (1200×630) la genera src/app/opengraph-image.tsx.
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
 };
+
+export const viewport: Viewport = { themeColor: "#172554" };
 
 export default function RootLayout({
   children,
@@ -48,6 +48,8 @@ export default function RootLayout({
         <Navbar />
         <main id="contenido">{children}</main>
         <Footer />
+        <WhatsAppContacts />
+        <Analytics />
       </body>
     </html>
   );

@@ -124,3 +124,22 @@ export function mapsHref(branch: Branch) {
   // Abrir la búsqueda de la dirección facilitada, sin inventar coordenadas.
   return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: `${branch.name}, ${branch.address}, Costa Rica` })}`;
 }
+
+// En Costa Rica los celulares empiezan con 5, 6, 7 u 8; los fijos (2…) no
+// tienen WhatsApp. Se usa el primer celular de la sucursal.
+export function whatsappNumber(branch: Branch): string | null {
+  for (const phone of [branch.phone, branch.secondary_phone]) {
+    const digits = (phone ?? "")
+      .replace(/\D/g, "")
+      .replace(/^506(?=\d{8}$)/, "");
+    if (/^[5-8]\d{7}$/.test(digits)) return `506${digits}`;
+  }
+  return null;
+}
+
+export function whatsappHref(branch: Branch): string | null {
+  const number = whatsappNumber(branch);
+  if (!number) return null;
+  const text = `Hola ${branch.name}, quisiera hacer una consulta.`;
+  return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+}

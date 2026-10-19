@@ -8,6 +8,7 @@ import {
   ExternalLink,
   Camera,
   Search,
+  MessageCircle,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { isDemoMode } from "@/lib/catalog";
@@ -18,6 +19,7 @@ import {
   phoneHref,
   mapsHref,
   safeBranchUrl,
+  whatsappHref,
   type Branch,
 } from "@/lib/branches";
 
@@ -197,6 +199,18 @@ export default async function BranchesPage({
                     {phone}
                   </a>
                 ))}
+              {whatsappHref(branch) && (
+                <a
+                  href={whatsappHref(branch)!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Escribir a ${branch.name} por WhatsApp`}
+                  className="inline-flex items-center gap-2 font-semibold text-green-700 hover:text-green-800"
+                >
+                  <MessageCircle size={17} aria-hidden="true" />
+                  WhatsApp
+                </a>
+              )}
             </div>
             <div className="mt-auto flex flex-wrap gap-3 pt-6">
               <a

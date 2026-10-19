@@ -58,3 +58,10 @@ export function safeNext(value: string | null, fallback = "/cuenta"): string {
     ? value
     : fallback;
 }
+
+// Anti-spam básico: un campo oculto que las personas no ven (honeypot) y un
+// tiempo mínimo de llenado. Los robots suelen rellenar todo al instante.
+export const minimumFormMs = 2500;
+export function looksLikeBot(trap: string, elapsedMs: number): boolean {
+  return trap.trim() !== "" || elapsedMs < minimumFormMs;
+}

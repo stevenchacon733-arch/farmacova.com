@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Check, Eye, EyeOff, LockKeyhole, LoaderCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 import {
   isStrongPassword,
   isValidEmail,
+  looksLikeBot,
   passwordRules,
   safeNext,
 } from "@/lib/validation";
@@ -60,6 +61,11 @@ export function AuthForm({
     confirmation: false,
   });
   const [pending, setPending] = useState(false);
+  const [trap, setTrap] = useState("");
+  const startedAt = useRef(0);
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const configured = hasSupabaseConfig();
@@ -92,6 +98,19 @@ export function AuthForm({
       (showRules && password !== confirmation)
     )
       return;
+    // Registro y recuperación envían correos: si parece un robot, se muestra
+    // el mismo mensaje de éxito sin llamar a Supabase.
+    if (
+      (isRegistration || isRecovery) &&
+      looksLikeBot(trap, Date.now() - startedAt.current)
+    ) {
+      setSuccess(
+        isRegistration
+          ? "Si el correo puede registrarse, recibirás un enlace de confirmación. Ábrelo para activar tu perfil."
+          : "Si hay una cuenta asociada, recibirás un enlace para cambiar tu contraseña. Revisa tu correo.",
+      );
+      return;
+    }
     if (!configured) {
       setError(
         "El acceso a cuentas todavía no está habilitado. Puedes explorar el catálogo sin registrarte.",
@@ -186,6 +205,22 @@ export function AuthForm({
   };
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      {/* Campo trampa: oculto para personas y lectores de pantalla. */}
+      <div
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-px w-px overflow-hidden"
+      >
+        <label htmlFor="auth-website">No completar este campo</label>
+        <input
+          id="auth-website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={trap}
+          onChange={(event) => setTrap(event.target.value)}
+        />
+      </div>
       {!configured && (
         <p className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm leading-relaxed text-blue-900">
           El acceso a cuentas todavía no está habilitado. El catálogo y las

@@ -5,6 +5,8 @@ import {
   mapsHref,
   phoneHref,
   safeBranchUrl,
+  whatsappHref,
+  whatsappNumber,
 } from "../src/lib/branches.ts";
 import { validateRecord } from "../src/lib/admin-validation.ts";
 
@@ -50,4 +52,22 @@ test("sucursales: bloquear protocolos y dominios engañosos sin romper registros
   void facebook_url;
   const valid = validateRecord("sucursales", legacy);
   assert.equal("maps_url" in valid && valid.maps_url, "");
+});
+
+test("sucursales: WhatsApp usa el primer celular y omite teléfonos fijos", () => {
+  const [aguasZarcas, sanGabriel, sanCarlos] = initialBranches;
+  assert.equal(whatsappNumber(aguasZarcas), "50683750404");
+  assert.equal(whatsappNumber(sanGabriel), "50660775505");
+  assert.equal(whatsappNumber(sanCarlos), "50683368336");
+  assert.equal(
+    whatsappNumber({ ...sanCarlos, phone: "2460-0309", secondary_phone: "" }),
+    null,
+  );
+  assert.equal(
+    whatsappNumber({ ...sanCarlos, phone: "+506 8472 8472" }),
+    "50684728472",
+  );
+  const href = new URL(whatsappHref(aguasZarcas)!);
+  assert.equal(href.origin + href.pathname, "https://wa.me/50683750404");
+  assert.ok(href.searchParams.get("text")?.includes("Farmacova Aguas Zarcas"));
 });
