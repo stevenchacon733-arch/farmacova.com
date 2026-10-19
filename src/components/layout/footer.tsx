@@ -5,7 +5,7 @@ import { brandContact, phoneHref } from "@/lib/branches";
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-slate-200 bg-white py-10">
+    <footer className="mt-20 border-t border-slate-200 bg-white pb-24 pt-10 sm:pb-10">
       <div className="shell flex flex-col justify-between gap-8 md:flex-row">
         <div>
           <Brand />
@@ -42,7 +42,7 @@ export function Footer() {
           <Link href="/servicios">Nuestros servicios</Link>
           <Link href="/sucursales">Sucursales</Link>
           <Link href="/auth?mode=registro">Crear mi perfil</Link>
-          <Link href="/privacidad">Privacidad</Link>
+          <Link href="/privacidad">Política de privacidad</Link>
         </div>
       </div>
       <div className="shell mt-8 border-t border-slate-100 pt-6 text-xs leading-relaxed text-slate-500">

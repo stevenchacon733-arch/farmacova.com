@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   isValidEmail,
   isStrongPassword,
+  looksLikeBot,
   normalizeSearch,
   safeNext,
 } from "../src/lib/validation.ts";
@@ -57,4 +58,10 @@ test("destinos de Auth: bloquear URLs externas y rutas no autorizadas", () => {
 
 test("búsqueda: normalizar acentos y espacios", () => {
   assert.equal(normalizeSearch("  ÁCIDO  "), "acido");
+});
+
+test("anti-spam: campo trampa lleno o envío instantáneo se tratan como robot", () => {
+  assert.equal(looksLikeBot("", 8000), false);
+  assert.equal(looksLikeBot("https://spam.test", 8000), true);
+  assert.equal(looksLikeBot("", 400), true);
 });
