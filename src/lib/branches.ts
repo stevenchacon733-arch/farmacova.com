@@ -9,6 +9,10 @@ export type Branch = {
   maps_url?: string;
   waze_url?: string;
   facebook_url?: string;
+  // Localidad para el filtro y coordenadas del pin en el mapa.
+  city?: string;
+  latitude?: number | null;
+  longitude?: number | null;
 };
 
 export const brandContact = {
@@ -19,6 +23,9 @@ export const brandContact = {
 
 // Datos facilitados por el propietario en su documento del 3 de octubre.
 // Horarios confirmados por el propietario durante la implementación.
+// Coordenadas: las de San Gabriel, San Carlos, Venecia y Pital salen de su
+// código Plus; la de Farmacova Aguas Zarcas es aproximada (centro del pueblo)
+// hasta que el propietario la confirme.
 export const initialBranches: Branch[] = [
   {
     id: "fc000000-0000-4000-8000-000000000001",
@@ -33,6 +40,9 @@ export const initialBranches: Branch[] = [
       "https://www.waze.com/es/live-map/directions/cr/provincia-de-alajuela/aguas-zarcas/farmacova?to=place.ChIJZ34vexBjoI8RSLYXHaRHPE4",
     secondary_phone: "",
     facebook_url: "",
+    city: "Aguas Zarcas",
+    latitude: 10.3758,
+    longitude: -84.3412,
     published: true,
   },
   {
@@ -45,6 +55,9 @@ export const initialBranches: Branch[] = [
     maps_url: "",
     waze_url: "",
     facebook_url: "https://www.facebook.com/farmaciasangabrielcr",
+    city: "Aguas Zarcas",
+    latitude: 10.375188,
+    longitude: -84.339688,
     published: true,
   },
   {
@@ -57,6 +70,9 @@ export const initialBranches: Branch[] = [
     maps_url: "",
     waze_url: "",
     facebook_url: "",
+    city: "Ciudad Quesada",
+    latitude: 10.324563,
+    longitude: -84.430688,
     published: true,
   },
   {
@@ -69,6 +85,9 @@ export const initialBranches: Branch[] = [
     maps_url: "",
     waze_url: "",
     facebook_url: "",
+    city: "Venecia",
+    latitude: 10.353938,
+    longitude: -84.274063,
     published: true,
   },
   {
@@ -81,6 +100,9 @@ export const initialBranches: Branch[] = [
     maps_url: "",
     waze_url: "",
     facebook_url: "",
+    city: "Pital",
+    latitude: 10.452063,
+    longitude: -84.272063,
     published: true,
   },
 ];
@@ -142,4 +164,70 @@ export function whatsappHref(branch: Branch): string | null {
   if (!number) return null;
   const text = `Hola ${branch.name}, quisiera hacer una consulta.`;
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+}
+
+export function branchCity(branch: Branch) {
+  return branch.city?.trim() || "Otras localidades";
+}
+
+export function branchCoordinates(branch: Branch): [number, number] | null {
+  const { latitude, longitude } = branch;
+  if (
+    typeof latitude !== "number" ||
+    typeof longitude !== "number" ||
+    !Number.isFinite(latitude) ||
+    !Number.isFinite(longitude)
+  )
+    return null;
+  return [latitude, longitude];
+}
+
+// Ruta en Google Maps: el enlace del propietario si existe; si no, el pin.
+export function directionsHref(branch: Branch) {
+  if (branch.maps_url && safeBranchUrl(branch.maps_url, "maps"))
+    return branch.maps_url;
+  const point = branchCoordinates(branch);
+  if (!point) return mapsHref(branch);
+  return `https://www.google.com/maps/dir/?${new URLSearchParams({ api: "1", destination: point.join(",") })}`;
+}
+
+export function wazeHref(branch: Branch): string | null {
+  if (branch.waze_url && safeBranchUrl(branch.waze_url, "waze"))
+    return branch.waze_url;
+  const point = branchCoordinates(branch);
+  if (!point) return null;
+  return `https://waze.com/ul?${new URLSearchParams({ ll: point.join(","), navigate: "yes" })}`;
+}
+
+// Convierte "9:00 a. m. a 9:00 p. m." en minutos desde medianoche.
+export function parseHours(
+  hours: string,
+): { opens: number; closes: number } | null {
+  const times = [
+    ...hours
+      .toLowerCase()
+      .matchAll(/(\d{1,2})(?::(\d{2}))?\s*([ap])\.?\s*m\.?/g),
+  ];
+  if (times.length !== 2) return null;
+  const [opens, closes] = times.map(([, h, m = "0", half]) => {
+    const hour = (Number(h) % 12) + (half === "p" ? 12 : 0);
+    return hour * 60 + Number(m);
+  });
+  if (opens > 24 * 60 || closes > 24 * 60) return null;
+  return { opens, closes };
+}
+
+// Costa Rica usa UTC−6 todo el año (sin horario de verano).
+export function costaRicaMinutes(now: Date) {
+  const shifted = new Date(now.getTime() - 6 * 3600000);
+  return shifted.getUTCHours() * 60 + shifted.getUTCMinutes();
+}
+
+export function openNow(branch: Branch, now: Date): boolean | null {
+  const range = parseHours(branch.hours);
+  if (!range) return null;
+  const minutes = costaRicaMinutes(now);
+  return range.closes > range.opens
+    ? minutes >= range.opens && minutes < range.closes
+    : minutes >= range.opens || minutes < range.closes;
 }

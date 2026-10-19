@@ -1,7 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  branchCity,
+  branchCoordinates,
+  directionsHref,
   initialBranches,
+  openNow,
+  parseHours,
+  wazeHref,
   mapsHref,
   phoneHref,
   safeBranchUrl,
@@ -70,4 +76,53 @@ test("sucursales: WhatsApp usa el primer celular y omite teléfonos fijos", () =
   const href = new URL(whatsappHref(aguasZarcas)!);
   assert.equal(href.origin + href.pathname, "https://wa.me/50683750404");
   assert.ok(href.searchParams.get("text")?.includes("Farmacova Aguas Zarcas"));
+});
+
+test("sucursales: mapa, rutas y estado de apertura", () => {
+  const [aguasZarcas, sanGabriel] = initialBranches;
+  assert.ok(initialBranches.every((branch) => branchCoordinates(branch)));
+  assert.deepEqual([...new Set(initialBranches.map(branchCity))].sort(), [
+    "Aguas Zarcas",
+    "Ciudad Quesada",
+    "Pital",
+    "Venecia",
+  ]);
+  assert.equal(branchCity({ ...sanGabriel, city: "" }), "Otras localidades");
+  // Ruta: enlace del propietario si existe; si no, coordenadas del pin.
+  assert.equal(directionsHref(aguasZarcas), aguasZarcas.maps_url);
+  assert.equal(
+    directionsHref(sanGabriel),
+    "https://www.google.com/maps/dir/?api=1&destination=10.375188%2C-84.339688",
+  );
+  assert.equal(wazeHref(aguasZarcas), aguasZarcas.waze_url);
+  assert.equal(
+    wazeHref(sanGabriel),
+    "https://waze.com/ul?ll=10.375188%2C-84.339688&navigate=yes",
+  );
+  assert.equal(wazeHref({ ...sanGabriel, latitude: null }), null);
+  assert.deepEqual(parseHours("9:00 a. m. a 9:00 p. m."), {
+    opens: 540,
+    closes: 1260,
+  });
+  assert.deepEqual(parseHours("12:30 p. m. a 8 p.m."), {
+    opens: 750,
+    closes: 1200,
+  });
+  assert.equal(parseHours("Por confirmar"), null);
+  // 15:00 UTC = 9:00 en Costa Rica.
+  assert.equal(openNow(aguasZarcas, new Date("2026-10-19T15:00:00Z")), true);
+  assert.equal(openNow(aguasZarcas, new Date("2026-10-19T14:59:00Z")), false);
+  assert.equal(openNow(sanGabriel, new Date("2026-10-20T02:00:00Z")), false);
+  assert.equal(openNow({ ...sanGabriel, hours: "" }, new Date()), null);
+  const valid = validateRecord("sucursales", {
+    ...sanGabriel,
+    latitude: "10.4",
+    longitude: "",
+  });
+  assert.ok("latitude" in valid && valid.latitude === 10.4);
+  assert.ok("longitude" in valid && valid.longitude === null);
+  assert.throws(
+    () => validateRecord("sucursales", { ...sanGabriel, latitude: 40 }),
+    /Latitud/,
+  );
 });

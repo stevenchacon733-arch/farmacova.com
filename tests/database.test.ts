@@ -177,6 +177,11 @@ test("migraciones: sellos, canje único, reintentos y permisos reales de Postgre
     }>("select name,phone,secondary_phone from public.branches order by id");
     assert.equal(locations.rows.length, 5);
     assert.equal(locations.rows[1].secondary_phone, "6077-5505");
+    const pins = await db.query<{ city: string; latitude: number }>(
+      "select city,latitude from public.branches where latitude is not null order by id",
+    );
+    assert.equal(pins.rows.length, 5);
+    assert.equal(pins.rows[2].city, "Ciudad Quesada");
     assert.equal(
       (
         await db.query(

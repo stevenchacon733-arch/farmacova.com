@@ -38,6 +38,9 @@ const names: Record<string, string> = {
   waze_url: "Enlace de Waze (opcional)",
   facebook_url: "Facebook de la sucursal (opcional)",
   hours: "Horario",
+  city: "Localidad (filtro de ciudades)",
+  latitude: "Latitud (ej. 10.3752)",
+  longitude: "Longitud (ej. -84.3397)",
   loyalty_enabled: "Habilitar inscripciones y acumulación",
   accumulate_remainder: "Acumular compras pequeñas entre facturas",
   earn_on_redemption: "Acumular sellos sobre el importe pagado al canjear",
@@ -70,6 +73,9 @@ const fields: Record<Entity, string[]> = {
     "phone",
     "secondary_phone",
     "hours",
+    "city",
+    "latitude",
+    "longitude",
     "maps_url",
     "waze_url",
     "facebook_url",
@@ -92,6 +98,9 @@ function blank(entity: Entity): AdminRecord {
         phone: "",
         secondary_phone: "",
         hours: "",
+        city: "",
+        latitude: null,
+        longitude: null,
         maps_url: "",
         waze_url: "",
         facebook_url: "",
@@ -504,13 +513,22 @@ export function RecordEditor({
                         name={field}
                         className="field"
                         type={
-                          field.includes("price") || field === "bestseller_rank"
+                          field.includes("price") ||
+                          field === "bestseller_rank" ||
+                          field === "latitude" ||
+                          field === "longitude"
                             ? "number"
                             : field.endsWith("_at")
                               ? "datetime-local"
                               : "text"
                         }
-                        step={field.includes("price") ? "0.01" : undefined}
+                        step={
+                          field.includes("price")
+                            ? "0.01"
+                            : field === "latitude" || field === "longitude"
+                              ? "any"
+                              : undefined
+                        }
                         min={
                           field.includes("price")
                             ? "0.01"
