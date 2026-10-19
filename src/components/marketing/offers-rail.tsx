@@ -32,7 +32,10 @@ export function OffersRail({
     if (!element) return;
     const card = element.firstElementChild as HTMLElement | null;
     element.scrollBy({
-      left: direction * ((card?.offsetWidth ?? element.clientWidth) + 20),
+      left:
+        direction *
+        ((card?.offsetWidth ?? element.clientWidth) +
+          parseFloat(getComputedStyle(element).columnGap || "0")),
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "instant"
         : "smooth",
@@ -59,12 +62,12 @@ export function OffersRail({
             move(event.key === "ArrowRight" ? 1 : -1);
           }
         }}
-        className={`offers-rail flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 *:shrink-0 *:snap-start ${count <= 2 ? "*:basis-[88%] sm:*:basis-[calc((100%_-_20px)/2)]" : "*:basis-[88%] sm:*:basis-[calc((100%_-_20px)/2)] lg:*:basis-[calc((100%_-_40px)/3)]"}`}
+        className={`offers-rail flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3 *:shrink-0 *:snap-start sm:gap-5 ${count <= 2 ? "*:basis-[85%] sm:*:basis-[calc((100%_-_20px)/2)]" : "*:basis-[85%] sm:*:basis-[calc((100%_-_20px)/2)] lg:*:basis-[calc((100%_-_40px)/3)]"}`}
       >
         {children}
       </div>
       <div
-        className="mt-3 flex justify-end gap-2"
+        className="mt-3 flex justify-center gap-3 sm:justify-end"
         aria-label="Controles de ofertas"
       >
         <button
