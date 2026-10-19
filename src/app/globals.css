@@ -101,6 +101,42 @@ summary {
 .field-error {
   @apply mt-2 text-sm leading-relaxed text-red-700;
 }
+/* Pines del mapa de sucursales: gota azul marino; la elegida, lima. */
+.branch-pin {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #1c465d;
+  border-radius: 50% 50% 50% 0;
+  background: #fff;
+  box-shadow: 0 3px 8px rgb(15 23 42 / 30%);
+  transform: rotate(-45deg);
+  transition:
+    width 0.2s,
+    height 0.2s,
+    border-color 0.2s;
+}
+.leaflet-container .leaflet-marker-pane .branch-pin img {
+  width: 68%;
+  transform: rotate(45deg);
+}
+.branch-pin--active {
+  width: 48px;
+  height: 48px;
+  border-color: #acd400;
+  background: #f7fbe6;
+  box-shadow:
+    0 0 0 4px rgb(172 212 0 / 35%),
+    0 4px 10px rgb(15 23 42 / 35%);
+}
+.branch-map .leaflet-control-attribution {
+  font-size: 10px;
+}
+.branch-map {
+  z-index: 0;
+}
 .sponsor-dialog {
   margin: auto;
   max-height: calc(100dvh - 2rem);

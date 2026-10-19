@@ -41,6 +41,14 @@ function text(value: unknown, label: string, min: number, max: number) {
     throw new Error(`${label}: escribe entre ${min} y ${max} caracteres.`);
   return value.trim();
 }
+// Coordenadas dentro de Costa Rica; vacío deja la sucursal fuera del mapa.
+function coordinate(value: unknown, label: string, min: number, max: number) {
+  if (value === null || value === undefined || value === "") return null;
+  const number = Number(value);
+  if (!Number.isFinite(number) || number < min || number > max)
+    throw new Error(`${label} fuera de Costa Rica.`);
+  return number;
+}
 function bool(value: unknown) {
   if (typeof value !== "boolean") throw new Error("Opción inválida.");
   return value;
@@ -103,6 +111,9 @@ export function validateRecord(
       waze_url: branchUrl(row.waze_url, "waze"),
       facebook_url: branchUrl(row.facebook_url, "facebook"),
       hours: text(row.hours, "Horario", 0, 500),
+      city: text(row.city ?? "", "Localidad", 0, 80),
+      latitude: coordinate(row.latitude, "Latitud", 5, 12),
+      longitude: coordinate(row.longitude, "Longitud", -87, -82),
       published: bool(row.published),
     };
   }
