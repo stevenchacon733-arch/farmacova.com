@@ -31,7 +31,7 @@ export const initialBranches: Branch[] = [
     id: "fc000000-0000-4000-8000-000000000001",
     name: "Farmacova Aguas Zarcas",
     address:
-      "50 metros norte del Banco Nacional, dentro del supermercado Gran Economás. Aguas Zarcas, San Carlos, Alajuela.",
+      "Dentro del Supermercado Economás, 50 metros norte del Banco Nacional. Aguas Zarcas, San Carlos, Alajuela.",
     phone: "8375-0404",
     hours: "9:00 a. m. a 9:00 p. m.",
     maps_url:
