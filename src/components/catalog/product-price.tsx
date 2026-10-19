@@ -1,7 +1,13 @@
 import { crc } from "@/lib/loyalty";
 import type { Product } from "@/lib/catalog";
 import { isActivePromotion } from "@/lib/promotions";
-export async function ProductPrice({ product }: { product: Product }) {
+export async function ProductPrice({
+  product,
+  showAvailability = true,
+}: {
+  product: Product;
+  showAvailability?: boolean;
+}) {
   // Componente exclusivo del servidor: las ofertas se evalúan por solicitud.
   // Misma regla que la insignia "Ahorra" de PromotionCard: si la promoción
   // está desactivada, se muestra el precio regular.
@@ -32,15 +38,17 @@ export async function ProductPrice({ product }: { product: Product }) {
           )}
         </>
       ) : null}
-      {product.availability && product.availability !== "confirmar" && (
-        <p
-          className={`mt-2 text-xs font-semibold ${product.availability === "agotado" ? "text-slate-500" : "text-green-700"}`}
-        >
-          {product.availability === "agotado"
-            ? "Agotado · Confirma reposición en sucursal"
-            : "Disponible · Confirma existencias en sucursal"}
-        </p>
-      )}
+      {showAvailability &&
+        product.availability &&
+        product.availability !== "confirmar" && (
+          <p
+            className={`mt-2 text-xs font-semibold ${product.availability === "agotado" ? "text-slate-500" : "text-green-700"}`}
+          >
+            {product.availability === "agotado"
+              ? "Agotado · Confirma reposición en sucursal"
+              : "Disponible · Confirma existencias en sucursal"}
+          </p>
+        )}
     </div>
   );
 }

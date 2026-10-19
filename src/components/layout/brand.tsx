@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export function Brand() {
+export function Brand({ className = "w-36 sm:w-44" }: { className?: string }) {
   return (
     <Link
       href="/"
@@ -13,7 +13,7 @@ export function Brand() {
         alt="Farmacova · Cuidamos de ti"
         width={222}
         height={112}
-        className="h-auto w-36 sm:w-44"
+        className={`h-auto ${className}`}
         preload
       />
     </Link>

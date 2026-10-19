@@ -2,12 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import {
-  categories,
-  getProduct,
-  isDemoMode,
-  localImagePath,
-} from "@/lib/catalog";
+import { categories, getProduct, localImagePath } from "@/lib/catalog";
 import { CategoryIcon } from "@/components/ui/category-icon";
 import { ProductPrice } from "@/components/catalog/product-price";
 
@@ -98,12 +93,6 @@ export default async function ProductPage({
           >
             Consultar disponibilidad en sucursal
           </Link>
-          {isDemoMode() && (
-            <p className="mt-6 text-xs leading-relaxed text-slate-500">
-              Ficha de ejemplo. No representa disponibilidad, indicaciones ni
-              presentaciones verificadas.
-            </p>
-          )}
         </div>
       </div>
     </div>

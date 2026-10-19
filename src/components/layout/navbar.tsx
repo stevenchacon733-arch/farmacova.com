@@ -1,109 +1,100 @@
 import Link from "next/link";
-import { BadgePercent, Search, CreditCard, MapPin } from "lucide-react";
+import {
+  BadgePercent,
+  MapPin,
+  Phone,
+  Search,
+  Stamp,
+  Syringe,
+} from "lucide-react";
 import { Brand } from "./brand";
 import { AccountLink } from "../auth/account-link";
 import { brandContact, phoneHref } from "@/lib/branches";
 
+// Accesos directos del encabezado: icono + etiqueta corta.
+const shortcuts = [
+  { href: "/promociones", label: "Ofertas", icon: BadgePercent, accent: true },
+  { href: "/sucursales", label: "Sucursales", icon: MapPin },
+  { href: "/fidelidad", label: "Club Farmacova", icon: Stamp },
+  { href: "/servicios", label: "Servicios", icon: Syringe },
+];
+
 export function Navbar() {
   return (
-    <header className="relative z-20 bg-blue-950 text-white">
-      <div className="border-b border-white/10">
-        <div className="shell flex min-h-8 items-center justify-between gap-4 text-xs">
-          <a
-            href={phoneHref(brandContact.phone)}
-            className="text-blue-100 hover:text-green-300"
-          >
-            Central: {brandContact.phone}
-          </a>
-          <div className="flex items-center gap-4 py-2">
-            <Link href="/servicios" className="hover:text-green-300">
-              Servicios
-            </Link>
-            <Link
-              href="/sucursales"
-              className="flex items-center gap-1.5 hover:text-green-300"
-            >
-              <MapPin size={13} aria-hidden="true" /> Encuentra tu sucursal
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className="shell flex flex-wrap items-center gap-x-8 gap-y-4 py-4">
-        <Brand />
+    <header className="relative z-30 lg:sticky lg:top-0 border-b border-slate-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+      <div className="shell flex flex-wrap items-center gap-x-6 gap-y-3 py-3 lg:flex-nowrap lg:gap-x-10">
+        <Brand className="w-32 sm:w-36" />
         <form
           action="/promociones"
           role="search"
-          className="order-3 flex w-full items-center border border-blue-200 bg-white text-blue-950 md:order-none md:flex-1"
+          className="order-3 flex h-11 w-full items-center rounded-full border border-slate-200 bg-slate-50 pl-4 pr-1 transition focus-within:border-blue-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-100 lg:order-none lg:mx-auto lg:max-w-xl"
         >
           <label htmlFor="site-search" className="sr-only">
             Buscar en las promociones del mes
           </label>
+          <Search
+            size={18}
+            className="shrink-0 text-slate-400"
+            aria-hidden="true"
+          />
           <input
             id="site-search"
             name="q"
             type="search"
             maxLength={120}
-            placeholder="Busca productos y promociones del mes"
-            className="min-w-0 flex-1 bg-transparent px-4 py-4 text-sm outline-none sm:text-base"
+            placeholder="Busca un producto o una marca"
+            className="min-w-0 flex-1 bg-transparent px-3 text-[15px] text-slate-900 outline-none placeholder:text-slate-400"
           />
           <button
             type="submit"
-            aria-label="Buscar promociones"
-            className="px-4 py-3 text-blue-950 hover:text-green-700"
+            className="shrink-0 rounded-full bg-blue-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-900"
           >
-            <Search size={28} strokeWidth={1.6} aria-hidden="true" />
+            Buscar
           </button>
         </form>
-        <div className="ml-auto flex items-center gap-4 md:ml-0">
-          <AccountLink dark />
-          <Link
-            href="/fidelidad"
-            className="flex flex-col items-center gap-1 text-white hover:text-green-300"
+        <div className="ml-auto flex items-center gap-1 lg:ml-0">
+          <nav
+            aria-label="Accesos directos"
+            className="hidden items-center gap-1 lg:flex"
           >
-            <CreditCard size={25} strokeWidth={1.6} aria-hidden="true" />
-            <span className="text-xs">Mi tarjeta</span>
-          </Link>
+            {shortcuts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`header-shortcut ${item.accent ? "text-green-700" : ""}`}
+              >
+                <item.icon size={21} strokeWidth={1.7} aria-hidden="true" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </nav>
+          <a
+            href={phoneHref(brandContact.phone)}
+            className="header-shortcut"
+            aria-label={`Llamar a la central, ${brandContact.phone}`}
+          >
+            <Phone size={21} strokeWidth={1.7} aria-hidden="true" />
+            <span>{brandContact.phone}</span>
+          </a>
+          <AccountLink compact />
         </div>
       </div>
+      {/* En móvil y tableta los accesos pasan a una fila de chips deslizable. */}
       <nav
-        aria-label="Navegación principal"
-        className="shell flex items-stretch gap-x-1 overflow-x-auto whitespace-nowrap text-sm sm:gap-x-4 [&>a]:shrink-0"
+        aria-label="Accesos directos"
+        className="shell -mt-1 flex gap-2 overflow-x-auto pb-3 [scrollbar-width:none] lg:hidden"
       >
-        <Link
-          href="/promociones"
-          className="flex items-center gap-2 bg-green-600 px-5 py-4 font-bold hover:bg-green-700"
-        >
-          <BadgePercent size={19} aria-hidden="true" /> Ofertas
-        </Link>
-        <Link href="/" className="px-4 py-4 font-medium hover:bg-white/10">
-          Inicio
-        </Link>
-        <Link
-          href="/servicios"
-          className="px-4 py-4 font-medium hover:bg-white/10"
-        >
-          Vacunas e inyectables
-        </Link>
-        <Link
-          href="/sucursales"
-          className="px-4 py-4 font-medium hover:bg-white/10"
-        >
-          Sucursales
-        </Link>
-        <Link
-          href="/fidelidad"
-          className="px-4 py-4 font-medium hover:bg-white/10"
-        >
-          Club Farmacova
-        </Link>
+        {shortcuts.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-medium transition ${item.accent ? "border-green-200 bg-green-50 text-green-800 hover:bg-green-100" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}
+          >
+            <item.icon size={16} strokeWidth={1.8} aria-hidden="true" />
+            {item.label}
+          </Link>
+        ))}
       </nav>
-      <Link
-        href="/fidelidad"
-        className="block bg-green-600 px-5 py-3 text-center text-sm font-semibold hover:bg-green-700"
-      >
-        Tus compras tienen recompensa: completa 6 sellos y recibe un 15% de
-        descuento
-      </Link>
     </header>
   );
 }

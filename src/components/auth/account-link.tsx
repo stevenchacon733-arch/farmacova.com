@@ -5,7 +5,7 @@ import { UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 
-export function AccountLink({ dark = false }: { dark?: boolean }) {
+export function AccountLink({ compact = false }: { compact?: boolean }) {
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
     if (!hasSupabaseConfig()) return;
@@ -34,14 +34,14 @@ export function AccountLink({ dark = false }: { dark?: boolean }) {
     <Link
       href={signedIn ? "/cuenta" : "/auth"}
       className={
-        dark
-          ? "flex shrink-0 flex-col items-center gap-1 text-xs text-white hover:text-green-300"
+        compact
+          ? "header-shortcut"
           : "inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold text-blue-900 hover:bg-slate-50"
       }
     >
       <UserRound
-        size={dark ? 25 : 19}
-        strokeWidth={dark ? 1.6 : 2}
+        size={compact ? 21 : 19}
+        strokeWidth={compact ? 1.7 : 2}
         aria-hidden="true"
       />
       <span>{signedIn ? "Mi perfil" : "Mi cuenta"}</span>
