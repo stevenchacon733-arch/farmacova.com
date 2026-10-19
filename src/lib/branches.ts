@@ -24,8 +24,8 @@ export const brandContact = {
 // Datos facilitados por el propietario en su documento del 3 de octubre.
 // Horarios confirmados por el propietario durante la implementación.
 // Coordenadas: las de San Gabriel, San Carlos, Venecia y Pital salen de su
-// código Plus; la de Farmacova Aguas Zarcas es aproximada (centro del pueblo)
-// hasta que el propietario la confirme.
+// código Plus; la de Farmacova Aguas Zarcas, del lugar de su enlace de Google
+// Maps (Supermercado Economás, confirmado por el propietario).
 export const initialBranches: Branch[] = [
   {
     id: "fc000000-0000-4000-8000-000000000001",
@@ -41,8 +41,8 @@ export const initialBranches: Branch[] = [
     secondary_phone: "",
     facebook_url: "",
     city: "Aguas Zarcas",
-    latitude: 10.3758,
-    longitude: -84.3412,
+    latitude: 10.358323,
+    longitude: -84.323266,
     published: true,
   },
   {
