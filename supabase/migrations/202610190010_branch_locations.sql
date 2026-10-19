@@ -12,4 +12,10 @@ set latitude = 10.358323, longitude = -84.323266
 where id = 'fc000000-0000-4000-8000-000000000001'
   and latitude = 10.3758 and longitude = -84.3412;
 
+-- Farmacia San Carlos: código Plus exacto facilitado por el propietario.
+update public.branches
+set address = '8HF9+VPH, Ciudad Quesada, Alajuela.', latitude = 10.324688, longitude = -84.430641
+where id = 'fc000000-0000-4000-8000-000000000003'
+  and address = '8HF9+RPX, Ciudad Quesada, Alajuela.';
+
 commit;

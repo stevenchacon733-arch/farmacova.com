@@ -63,7 +63,7 @@ export const initialBranches: Branch[] = [
   {
     id: "fc000000-0000-4000-8000-000000000003",
     name: "Farmacia San Carlos",
-    address: "8HF9+RPX, Ciudad Quesada, Alajuela.",
+    address: "8HF9+VPH, Ciudad Quesada, Alajuela.",
     phone: "2460-0309",
     secondary_phone: "8336-8336",
     hours: "8:00 a. m. a 8:00 p. m.",
@@ -71,8 +71,8 @@ export const initialBranches: Branch[] = [
     waze_url: "",
     facebook_url: "",
     city: "Ciudad Quesada",
-    latitude: 10.324563,
-    longitude: -84.430688,
+    latitude: 10.324688,
+    longitude: -84.430641,
     published: true,
   },
   {
