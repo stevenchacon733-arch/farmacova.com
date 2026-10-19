@@ -283,7 +283,7 @@ html:has(.product-drawer[open]) {
   );
 }
 .brands-track {
-  animation: brands-scroll 32s linear infinite;
+  animation: brands-scroll 20s linear infinite;
 }
 .brands-viewport:hover .brands-track,
 .brands-viewport:focus-within .brands-track {

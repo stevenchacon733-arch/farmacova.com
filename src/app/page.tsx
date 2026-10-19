@@ -52,7 +52,7 @@ export default async function HomePage() {
     <>
       <h1 className="sr-only">Farmacova: promociones y productos del mes</h1>
       <CampaignCarousel campaigns={campaigns} demo={isDemoMode()} />
-      <div className="space-y-16 py-12 sm:space-y-24 sm:py-16">
+      <div className="space-y-12 pb-2 pt-10 sm:space-y-20 sm:pb-6 sm:pt-16">
         <section
           id="promociones-del-mes"
           className="shell scroll-mt-[max(1rem,env(safe-area-inset-top))]"

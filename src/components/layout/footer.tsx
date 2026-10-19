@@ -5,7 +5,7 @@ import { brandContact, phoneHref } from "@/lib/branches";
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-slate-200 bg-white pb-24 pt-10 sm:pb-10">
+    <footer className="mt-10 sm:mt-16 border-t border-slate-200 bg-white pb-24 pt-10 sm:pb-10">
       <div className="shell flex flex-col justify-between gap-8 md:flex-row">
         <div>
           <Brand />
