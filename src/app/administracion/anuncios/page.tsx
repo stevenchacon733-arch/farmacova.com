@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { isDemoMode } from "@/lib/catalog";
 import { demoCampaigns, type Campaign } from "@/lib/campaigns";
-import { createClient } from "@/lib/supabase/server";
-import { hasSupabaseConfig } from "@/lib/supabase/config";
+import { requireAdmin } from "@/lib/management";
 import { CampaignEditor } from "@/components/marketing/campaign-editor";
 import { PopupEditor } from "@/components/marketing/popup-editor";
 import { demoPopup, type PopupAd } from "@/lib/popup";
@@ -18,29 +16,8 @@ export default async function CampaignAdminPage() {
   const demo = isDemoMode();
   let campaigns: Campaign[] = demoCampaigns;
   let popups: PopupAd[] = [demoPopup];
-  if (!demo) {
-    if (!hasSupabaseConfig()) redirect("/auth");
-    const client = await createClient();
-    const {
-      data: { user },
-      error,
-    } = await client.auth.getUser();
-    if (error || !user?.email_confirmed_at) redirect("/auth");
-    if (user.app_metadata?.role !== "admin")
-      return (
-        <div className="shell py-12">
-          <h1 className="text-3xl font-semibold text-blue-950">
-            Acceso restringido
-          </h1>
-          <p className="mt-4 text-slate-500">
-            Este panel está disponible únicamente para administradores de
-            Farmacova.
-          </p>
-          <Link href="/" className="btn-primary mt-6">
-            Volver al inicio
-          </Link>
-        </div>
-      );
+  const client = await requireAdmin();
+  if (client) {
     const { data, error: readError } = await client
       .from("hero_campaigns")
       .select(

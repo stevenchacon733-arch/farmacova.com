@@ -54,6 +54,7 @@ export function safeNext(value: string | null, fallback = "/cuenta"): string {
   return value === "/cuenta" ||
     value === "/fidelidad" ||
     value === "/administracion" ||
+    value === "/cuenta/seguridad" ||
     value === "/auth/actualizar-clave"
     ? value
     : fallback;

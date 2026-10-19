@@ -84,7 +84,7 @@ tests/
 
 ## Configurar Supabase
 
-1. Crea el proyecto y aplica, en orden, los cinco archivos de `supabase/migrations/`, desde `202610010001_initial.sql` hasta `202610030005_branches_monthly_promotions.sql`. Incluyen productos, perfiles, publicidad, campañas, precios, sucursales, fidelidad, imágenes y RLS. Si ya aplicaste las primeras cuatro, ejecuta solamente la quinta.
+1. Crea el proyecto y aplica, en orden, todos los archivos de `supabase/migrations/`. Incluyen productos, perfiles, publicidad, campañas, precios, sucursales, fidelidad, imágenes, RLS y la verificación en dos pasos para administradores.
 2. Copia las variables en `.env.local` y en Vercel:
 
 ```dotenv
@@ -94,26 +94,16 @@ FARMACOVA_DEMO_MODE=false
 ```
 
 3. Activa Email/Password y Confirm email. Configura contraseña mínima de 8 caracteres con mayúsculas, minúsculas, números y símbolos en Supabase. La misma validación se realiza en el formulario; la política del servidor es necesaria para peticiones directas. `supabase/config.toml` solo configura el entorno Supabase local.
-4. Configura Site URL y redirecciones exactas a `/auth/callback` y `/auth/callback?next=/auth/actualizar-clave`, tanto para desarrollo como para el dominio final.
+4. Configura Site URL y redirecciones exactas a `/auth/confirm` y `/auth/callback`, tanto para desarrollo como para el dominio final.
 5. Configura SMTP para los correos de registro y recuperación en producción.
 
 Un regex comprueba el formato del correo; su titularidad se confirma con el enlace enviado por Supabase. La página de cuenta verifica la identidad con `getUser()` y exige correo confirmado. El proxy renueva la sesión usando `getClaims()`. Cookies SameSite=Lax y Secure en producción.
 
-### Plantillas de correo
+### Plantillas de correo y seguridad
 
-Para confirmar registro en cualquier dispositivo:
-
-```html
-<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Confirmar mi correo</a>
-```
-
-Para recuperar contraseña:
-
-```html
-<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery">Cambiar mi contraseña</a>
-```
-
-También se incluye el callback PKCE para enlaces predeterminados. No registrar tokens ni contraseñas en logs.
+Las plantillas en español están en `supabase/templates/`. Los pasos para
+activarlas, configurar SMTP, crear el administrador (con verificación en dos
+pasos) y endurecer GitHub están en [SEGURIDAD.md](SEGURIDAD.md).
 
 ## Catálogo y datos comerciales
 
