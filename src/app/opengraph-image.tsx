@@ -22,7 +22,7 @@ export default async function OpenGraphImage() {
         alignItems: "center",
         justifyContent: "center",
         background: "#ffffff",
-        borderBottom: "28px solid #16a34a",
+        borderBottom: "28px solid #acd400",
       }}
     >
       <img src={src} width={666} height={336} alt="" />
@@ -31,7 +31,7 @@ export default async function OpenGraphImage() {
           marginTop: 24,
           fontSize: 44,
           fontWeight: 700,
-          color: "#172554",
+          color: "#1c465d",
         }}
       >
         Promociones del mes · San Carlos, Costa Rica

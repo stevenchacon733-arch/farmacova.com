@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
-export const viewport: Viewport = { themeColor: "#172554" };
+export const viewport: Viewport = { themeColor: "#1c465d" };
 
 export default function RootLayout({
   children,

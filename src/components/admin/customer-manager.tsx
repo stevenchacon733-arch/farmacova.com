@@ -220,7 +220,7 @@ export function CustomerManager({
                 {Array.from({ length: 6 }, (_, i) => (
                   <div
                     key={i}
-                    className={`rounded-xl p-4 text-center font-bold ${i < visibleStamps(member.total_stamps, available.length) ? "bg-green-500" : "bg-white/10"}`}
+                    className={`rounded-xl p-4 text-center font-bold ${i < visibleStamps(member.total_stamps, available.length) ? "bg-green-500 text-blue-950" : "bg-white/10"}`}
                   >
                     {i < visibleStamps(member.total_stamps, available.length)
                       ? "✓"

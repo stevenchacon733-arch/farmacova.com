@@ -34,7 +34,7 @@ function BrandBadge({ brand, index }: { brand: Brand; index: number }) {
 // el visitante prefiere menos movimiento.
 export function BrandsRail() {
   return (
-    <section aria-labelledby="brands-title" className="shell py-8 sm:py-10">
+    <section aria-labelledby="brands-title" className="shell py-2 sm:py-4">
       <h2
         id="brands-title"
         className="text-center text-sm font-bold uppercase tracking-[0.16em] text-green-700"

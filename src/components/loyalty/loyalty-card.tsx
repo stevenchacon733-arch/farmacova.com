@@ -75,7 +75,7 @@ export function LoyaltyCard({
               <div
                 key={i}
                 aria-label={`Sello ${i + 1}: ${i < filled ? "completado" : "pendiente"}`}
-                className={`flex aspect-square items-center justify-center rounded-2xl border ${i < filled ? "border-green-400 bg-green-500 text-white" : "border-white/25 bg-white/5 text-blue-200"}`}
+                className={`flex aspect-square items-center justify-center rounded-2xl border ${i < filled ? "border-green-400 bg-green-500 text-blue-950" : "border-white/25 bg-white/5 text-blue-200"}`}
               >
                 {i < filled ? (
                   <Check size={28} aria-hidden="true" />
