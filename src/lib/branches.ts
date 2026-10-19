@@ -24,14 +24,14 @@ export const brandContact = {
 // Datos facilitados por el propietario en su documento del 3 de octubre.
 // Horarios confirmados por el propietario durante la implementación.
 // Coordenadas: las de San Gabriel, San Carlos, Venecia y Pital salen de su
-// código Plus; la de Farmacova Aguas Zarcas es aproximada (centro del pueblo)
-// hasta que el propietario la confirme.
+// código Plus; la de Farmacova Aguas Zarcas, del lugar de su enlace de Google
+// Maps (Supermercado Economás, confirmado por el propietario).
 export const initialBranches: Branch[] = [
   {
     id: "fc000000-0000-4000-8000-000000000001",
     name: "Farmacova Aguas Zarcas",
     address:
-      "50 metros norte del Banco Nacional, dentro del supermercado Gran Economás. Aguas Zarcas, San Carlos, Alajuela.",
+      "Dentro del Supermercado Economás, 50 metros norte del Banco Nacional. Aguas Zarcas, San Carlos, Alajuela.",
     phone: "8375-0404",
     hours: "9:00 a. m. a 9:00 p. m.",
     maps_url:
@@ -41,8 +41,8 @@ export const initialBranches: Branch[] = [
     secondary_phone: "",
     facebook_url: "",
     city: "Aguas Zarcas",
-    latitude: 10.3758,
-    longitude: -84.3412,
+    latitude: 10.358323,
+    longitude: -84.323266,
     published: true,
   },
   {
@@ -63,7 +63,7 @@ export const initialBranches: Branch[] = [
   {
     id: "fc000000-0000-4000-8000-000000000003",
     name: "Farmacia San Carlos",
-    address: "8HF9+RPX, Ciudad Quesada, Alajuela.",
+    address: "8HF9+VPH, Ciudad Quesada, Alajuela.",
     phone: "2460-0309",
     secondary_phone: "8336-8336",
     hours: "8:00 a. m. a 8:00 p. m.",
@@ -71,8 +71,8 @@ export const initialBranches: Branch[] = [
     waze_url: "",
     facebook_url: "",
     city: "Ciudad Quesada",
-    latitude: 10.324563,
-    longitude: -84.430688,
+    latitude: 10.324688,
+    longitude: -84.430641,
     published: true,
   },
   {
