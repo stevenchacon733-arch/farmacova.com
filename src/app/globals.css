@@ -4,6 +4,35 @@
   --font-sans: Arial, Helvetica, sans-serif;
 }
 
+/* Paleta de la guía de marca Farmacova: celeste (Pantone 2171 C, #3C9EDF),
+   verde lima (Pantone 4570 C, #ACD400) y el azul marino de la guía
+   (#1C465D). Se reemplazan las escalas "blue" y "green" de Tailwind para que
+   todo el sitio use los colores de marca sin cambiar las clases. */
+@theme {
+  --color-blue-50: #f0f7fd;
+  --color-blue-100: #ddebf7;
+  --color-blue-200: #bcd9f1;
+  --color-blue-300: #8fc2ea;
+  --color-blue-400: #62ade4;
+  --color-blue-500: #3c9edf;
+  --color-blue-600: #2b85c4;
+  --color-blue-700: #236c9f;
+  --color-blue-800: #1f5a80;
+  --color-blue-900: #1d4f6e;
+  --color-blue-950: #1c465d;
+  --color-green-50: #f7fbe6;
+  --color-green-100: #eef6c8;
+  --color-green-200: #dfee97;
+  --color-green-300: #cce35f;
+  --color-green-400: #bbda2c;
+  --color-green-500: #acd400;
+  --color-green-600: #8dae00;
+  --color-green-700: #5e7500;
+  --color-green-800: #4a5c00;
+  --color-green-900: #3a4800;
+  --color-green-950: #222a00;
+}
+
 :root {
   color-scheme: light;
 }
@@ -34,11 +63,11 @@ summary {
   cursor: pointer;
 }
 ::selection {
-  background: #dcfce7;
-  color: #1e3a8a;
+  background: #eef6c8;
+  color: #1c465d;
 }
 :focus-visible {
-  outline: 3px solid #16a34a;
+  outline: 3px solid #2b85c4;
   outline-offset: 4px;
 }
 .shell {
@@ -261,7 +290,7 @@ html:has(.product-drawer[open]) {
   }
 }
 .hero-carousel {
-  background: linear-gradient(110deg, #eaf2ff 0%, #dceaff 55%, #e5f5e8 100%);
+  background: linear-gradient(110deg, #f0f7fd 0%, #ddebf7 55%, #f3f9dc 100%);
   touch-action: pan-y;
 }
 .hero-slide {
@@ -269,7 +298,7 @@ html:has(.product-drawer[open]) {
 }
 .offers-rail {
   scrollbar-width: thin;
-  scrollbar-color: #1e3a8a #eff6ff;
+  scrollbar-color: #1c465d #f0f7fd;
 }
 /* Carrusel de marcas: desplazamiento continuo con bordes difuminados y un
    brillo diagonal que recorre cada logo de forma escalonada. */
