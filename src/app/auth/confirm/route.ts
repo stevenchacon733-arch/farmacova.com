@@ -6,25 +6,22 @@ import { hasSupabaseConfig } from "@/lib/supabase/config";
 // Enlaces de los correos (supabase/templates): funcionan aunque se abran en
 // otro navegador o en el celular, a diferencia del flujo PKCE de /auth/callback.
 const destinations: Partial<Record<EmailOtpType, string>> = {
-  email: "/cuenta",
-  signup: "/cuenta",
   recovery: "/auth/actualizar-clave",
   email_change: "/cuenta/seguridad",
 };
 
 export async function GET(request: NextRequest) {
-  const hash = request.nextUrl.searchParams.get("token_hash");
-  const type = request.nextUrl.searchParams.get("type") as EmailOtpType | null;
-  const destination = type ? destinations[type] : undefined;
-  if (hash && type && destination && hasSupabaseConfig()) {
-    const client = await createClient();
-    const { error } = await client.auth.verifyOtp({ token_hash: hash, type });
-    if (!error)
-      return NextResponse.redirect(new URL(destination, request.url), {
-        headers: { "Cache-Control": "private, no-store" },
-      });
+  const params = request.nextUrl.searchParams;
+  const type = (params.get("type") ?? "email") as EmailOtpType;
+  let destination = "/auth?error=enlace";
+  if (hasSupabaseConfig()) {
+    // Supabase valida el enlace: un token o tipo inválido devuelve error.
+    const { error } = await (
+      await createClient()
+    ).auth.verifyOtp({ token_hash: params.get("token_hash") ?? "", type });
+    if (!error) destination = destinations[type] ?? "/cuenta";
   }
-  return NextResponse.redirect(new URL("/auth?error=enlace", request.url), {
+  return NextResponse.redirect(new URL(destination, request.url), {
     headers: { "Cache-Control": "private, no-store" },
   });
 }
