@@ -18,7 +18,7 @@
   "dependencies": {
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.117.2",
-    "asn1js": "^3.0.10",
+    "asn1js": "^4.0.0",
     "fflate": "^0.8.3",
     "leaflet": "1.9.4",
     "lucide-react": "1.49.0",
